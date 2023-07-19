@@ -6,10 +6,15 @@ import Link from '@mui/material/Link';
 import { blue, grey, yellow } from '@mui/material/colors';
 import { Facebook, Instagram, Twitter } from '@mui/icons-material';
 import Grid from '@mui/material/Grid';
+import { Divider } from '@mui/material';
 
 const Footer = () => {
     return (
         <>
+            <Divider sx={{
+                borderBottomWidth: 2,
+                backgroundColor: "primary.main"
+            }} />
             <Box
                 sx={{
                     backgroundColor: grey[200],
@@ -68,11 +73,11 @@ const Footer = () => {
                                 variant="h6" color="primary.main" gutterBottom>
                                 Hệ thống chi nhánh
                             </Typography>
-                            <Link gutterBottom>
+                            <Link gutterBottom sx={{ cursor: 'pointer' }}>
                                 Khu vực miền nam
                             </Link>
                             <br/>
-                            <Link gutterBottom>
+                            <Link gutterBottom sx={{ cursor: 'pointer' }}>
                                 Khu vực miền bắc
                             </Link>
                         </Grid>

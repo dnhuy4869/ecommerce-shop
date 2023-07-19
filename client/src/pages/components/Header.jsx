@@ -13,19 +13,19 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Computer } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
-import { Link } from '@mui/material';
+import { Breadcrumbs, Link } from '@mui/material';
 
 const pages = [
     {
-        displayName: 'Trang chủ', 
+        displayName: 'Trang chủ',
         href: "/",
     },
     {
-        displayName: 'Sản phẩm', 
+        displayName: 'Sản phẩm',
         href: "/products",
     },
     {
-        displayName: 'Giới thiệu', 
+        displayName: 'Giới thiệu',
         href: "/about",
     },
 ];
@@ -53,10 +53,10 @@ const Header = () => {
 
     return (
         <>
-             <AppBar position="static">
+            <AppBar position="static">
                 <Container maxWidth="lg">
                     <Toolbar disableGutters>
-                         {/* Mobile layout */}
+                        {/* Mobile layout */}
                         <Computer sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                         <Typography
                             variant="h6"
@@ -107,7 +107,7 @@ const Header = () => {
                             >
                                 {pages.map((page, index) => (
                                     <MenuItem key={index} onClick={handleCloseNavMenu}>
-                                        <Button 
+                                        <Button
                                             textAlign="center"
                                             component={RouterLink}
                                             to={page.href}
@@ -143,10 +143,10 @@ const Header = () => {
                         <Box sx={{
                             flexGrow: 1,
                             ml: "14px",
-                            display: { xs: 'none', md: 'flex' } 
+                            display: { xs: 'none', md: 'flex' }
                         }}>
                             {pages.map((page, index) => (
-                                <Button 
+                                <Button
                                     component={RouterLink}
                                     to={page.href}
                                     key={index}
