@@ -12,8 +12,9 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Computer } from '@mui/icons-material';
-import { Link as RouterLink } from 'react-router-dom';
-import { Breadcrumbs, Link } from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Breadcrumbs, Divider, Link } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
 
 const pages = [
     {
@@ -33,6 +34,8 @@ const pages = [
 const settings = ['Hồ sơ', 'Bảng điều khiển', 'Đăng xuất'];
 
 const Header = () => {
+    const navigate = useNavigate();
+
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -108,7 +111,6 @@ const Header = () => {
                                 {pages.map((page, index) => (
                                     <MenuItem key={index} onClick={handleCloseNavMenu}>
                                         <Button
-                                            textAlign="center"
                                             component={RouterLink}
                                             to={page.href}
                                             color="primary">
@@ -158,7 +160,7 @@ const Header = () => {
                             ))}
                         </Box>
 
-                        <Box sx={{ flexGrow: 0 }}>
+                        {/* <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                     <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -186,6 +188,13 @@ const Header = () => {
                                     </MenuItem>
                                 ))}
                             </Menu>
+                        </Box> */}
+
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Button color="inherit" startIcon={<PersonIcon />}
+                                onClick={() => { navigate("/login") }}>
+                                Đăng nhập
+                            </Button>
                         </Box>
                     </Toolbar>
                 </Container>

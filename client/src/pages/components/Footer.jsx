@@ -17,7 +17,7 @@ const Footer = () => {
             }} />
             <Box
                 sx={{
-                    backgroundColor: grey[200],
+                    backgroundColor: "white",
                     p: 6,
                 }}
                 component="footer"

@@ -17,7 +17,7 @@ const Breadcrumbs = () => {
                     <Home />
                     Trang chủ
                 </Link>
-                <Typography color="grey.700" sx={{ fontWeight: 500 }}>Sản phẩm</Typography>
+                <Typography color="grey.600" sx={{ fontWeight: 500 }}>Sản phẩm</Typography>
             </MUIBreadcrumbs>
         </>
     )
