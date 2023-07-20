@@ -1,7 +1,8 @@
+import React from 'react';
 import { Box, Checkbox, Container, 
     FormControlLabel, TextField, Typography,
     Grid, Link, Button } from '@mui/material';
-import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 const Login = () => {
     return (
@@ -58,7 +59,7 @@ const Login = () => {
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="/resgister" variant="body2">
+                                <Link component={RouterLink} to="/register" variant="body2">
                                     {"Bạn chưa có tài khoản? Đăng ký"}
                                 </Link>
                             </Grid>
