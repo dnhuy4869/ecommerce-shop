@@ -34,7 +34,6 @@ const MenuList = () => {
             navigate(`admin/${menuList[0].href}`);
         }
 
-
     }, []);
 
     return (
