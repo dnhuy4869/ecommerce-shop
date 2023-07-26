@@ -1,11 +1,15 @@
 import { AppBar, Avatar, Box, ButtonBase, Toolbar, useTheme } from '@mui/material';
-import Logo from './Logo';
+import Logo from '../Logo';
 import MenuIcon from '@mui/icons-material/Menu';
 import Notification from './Notification';
 import Profile from './Profile';
+import { useSelector } from 'react-redux';
+import { drawerWidth } from '../../../app/constant';
 
-const Header = () => {
+const Header = ({ handleLeftDrawerToggle }) => {
     const theme = useTheme();
+
+    const leftDrawerOpened = useSelector(state => state.adminSidebar.isOpened);
 
     return (
         <>
@@ -15,24 +19,28 @@ const Header = () => {
                 elevation={0}
                 sx={{
                     bgcolor: theme.palette.background.default,
+                    transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
                 }}>
                 <Toolbar>
                     <Box
                         sx={{
-                            width: 228,
+                            width: `calc(${drawerWidth}px - 1rem)`,
                             display: 'flex',
                             [theme.breakpoints.down('md')]: {
                                 width: 'auto'
-                            }
+                            },
                         }}
                     >
-                        <Box component="span" sx={{
-                            display: {
-                                xs: 'none',
-                                md: 'block'
-                            },
-                            flexGrow: 1
-                        }}>
+                        <Box
+                            component="span"
+                            sx={{
+                                display: {
+                                    xs: 'none',
+                                    md: 'block'
+                                },
+                                flexGrow: 1,
+                                width: `calc(${drawerWidth}px - 1rem)`,
+                            }}>
                             <Logo />
                         </Box>
                     </Box>
@@ -47,7 +55,9 @@ const Header = () => {
                         <ButtonBase sx={{
                             borderRadius: '12px',
                             overflow: 'hidden',
-                            marginLeft: "1rem",
+                            [theme.breakpoints.up('md')]: {
+
+                            }
                         }}>
                             <Avatar
                                 variant="rounded"
@@ -62,10 +72,10 @@ const Header = () => {
                                         color: theme.palette.secondary.light
                                     }
                                 }}
-                                onClick={() => { }}
                                 color="inherit"
+                                onClick={handleLeftDrawerToggle}
                             >
-                                <MenuIcon stroke={1.5} size="1.3rem" />
+                                <MenuIcon />
                             </Avatar>
                         </ButtonBase>
 

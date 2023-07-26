@@ -1,6 +1,6 @@
 import { Avatar, Box, Chip, Divider, List, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Stack, Typography, useTheme } from "@mui/material";
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import User1 from '../../../assets/user-round.svg';
+import User1 from '../../../assets/profile-default.png';
 import { useState } from "react";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
