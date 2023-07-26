@@ -1,5 +1,4 @@
 import { AppBar, Box, Toolbar } from '@mui/material';
-import React from 'react';
 import Header from "./Header";
 import Sidebar from './Sidebar';
 import { Outlet } from 'react-router-dom';
@@ -10,11 +9,7 @@ const AdminLayout = () => {
             <Box>
 
                 {/* Header */}
-                <AppBar>
-                    <Toolbar>
-                        <Header />
-                    </Toolbar>
-                </AppBar>
+                <Header />
 
                 {/* Sidebar */}
                 <Sidebar />
