@@ -3,6 +3,9 @@ import AdminLayout from "../layout/admin";
 import Categories from "../views/admin/Categories";
 import Products from "../views/admin/Products";
 import NotFound from "../views/NotFound";
+import AuthLayout from "../layout/auth";
+import Login from "../views/auth/Login";
+import Register from "../views/auth/Register";
 
 const router = createBrowserRouter([
     {
@@ -11,8 +14,18 @@ const router = createBrowserRouter([
         element: <></>,
     },
     {
-        path: "/login",
-        element: <></>,
+        path: "/auth",
+        element: <AuthLayout />,
+        children: [
+            {
+                path: "login",
+                element: <Login />,
+            },
+            {
+                path: "register",
+                element: <Register />,
+            },
+        ]
     },
     {
         path: "/admin",
