@@ -1,4 +1,4 @@
-const HttpStatus = {
+const httpStatus = {
     // Informational
     CONTINUE: 100,
     SWITCHING_PROTOCOLS: 101,
@@ -66,4 +66,4 @@ const HttpStatus = {
     NETWORK_AUTHENTICATION_REQUIRED: 511,
 };
 
-export default HttpStatus;
+export default httpStatus;
