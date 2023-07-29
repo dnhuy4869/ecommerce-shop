@@ -1,8 +1,8 @@
-import User from "../models/user.js";
-import { isValidEmail, isValidStringData } from "./validator.js";
+import UserModel from "../user/user.model.js";
+import { isValidEmail, isValidStringData } from "../utils/validator.js";
 
 const validateFullName = (data) => {
-    const fullNameOptions = User.schema.paths.fullName.options;
+    const fullNameOptions = UserModel.schema.paths.fullName.options;
 
     if (fullNameOptions.required && fullNameOptions.required === true) {
         if (!isValidStringData(
@@ -18,7 +18,7 @@ const validateFullName = (data) => {
 }
 
 const validateUsername = (data) => {
-    const usernameOptions = User.schema.paths.username.options;
+    const usernameOptions = UserModel.schema.paths.username.options;
 
     if (usernameOptions.required && usernameOptions.required === true) {
         if (!isValidStringData(
@@ -34,7 +34,7 @@ const validateUsername = (data) => {
 }
 
 const validatePassword = (data) => {
-    const passwordOptions = User.schema.paths.password.options;
+    const passwordOptions = UserModel.schema.paths.password.options;
 
     if (passwordOptions.required && passwordOptions.required === true) {
         if (!isValidStringData(
@@ -50,7 +50,7 @@ const validatePassword = (data) => {
 }
 
 const validateEmail = (data) => {
-    const emailOptions = User.schema.paths.email.options;
+    const emailOptions = UserModel.schema.paths.email.options;
 
     if (emailOptions.required && emailOptions.required === true) {
         if (!isValidStringData(
