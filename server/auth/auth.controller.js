@@ -1,6 +1,7 @@
 import UserModel from "../user/user.model.js";
 import HttpStatus from "../constants/http-status.js"
 import userValidator from "../user/user.validator.js";
+import bcrypt from 'bcrypt';
 
 const login = async (req, res) => {
     try {
@@ -24,14 +25,20 @@ const login = async (req, res) => {
             })
         }
 
-        const user = await UserModel.findOne({ 
+        const user = await UserModel.findOne({
             username: data.username,
-            password: data.password,
         });
 
         if (!user) {
             return res.status(HttpStatus.NOT_FOUND).json({
-                message: "Tên tài khoản hoặc mật khẩu không chính xác",
+                message: "Tên tài khoản không tồn tại",
+            })
+        }
+
+        const validPassword = await bcrypt.compare(data.password, user.password);
+        if (!validPassword) {
+            return res.status(HttpStatus.UNAUTHORIZED).json({
+                message: "Mật khẩu không chính xác",
             })
         }
 
@@ -96,6 +103,11 @@ const register = async (req, res) => {
                 message: "Địa chỉ email đã tồn tại",
             });
         }
+
+        const salt = await bcrypt.genSalt(Number(process.env.SALT));
+        const hashedPassword = await bcrypt.hash(data.password, salt);
+
+        data.password = hashedPassword;
 
         const newUser = await new UserModel(data);
         await newUser.save();
