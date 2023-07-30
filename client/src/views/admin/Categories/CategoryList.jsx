@@ -1,4 +1,4 @@
-import EnhancedTable from "../../../components/EnhancedTable";
+import EnhancedTable from "@components/EnhancedTable";
 
 const CategoryList = () => {
     return (
