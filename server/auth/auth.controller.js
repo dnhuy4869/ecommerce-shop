@@ -2,6 +2,10 @@ import UserModel from "../user/user.model.js";
 import HttpStatus from "../constants/http-status.js"
 import userValidator from "../user/user.validator.js";
 import bcrypt from 'bcrypt';
+import authMethods from "./auth.methods.js";
+
+const ACCESS_TOKEN_LIFE = "30s";
+const REFRESH_TOKEN_LIFE = "1d";
 
 const login = async (req, res) => {
     try {
@@ -42,7 +46,40 @@ const login = async (req, res) => {
             })
         }
 
-        return res.status(HttpStatus.OK).json(user);
+        // generate token
+        const tokenData = {
+            username: user.username,
+            role: user.role,
+        }
+
+        const accessToken = authMethods.generateToken(
+            tokenData,
+            process.env.ACCESS_TOKEN_SECRET,
+            ACCESS_TOKEN_LIFE);
+        const refreshToken = authMethods.generateToken(
+            tokenData,
+            process.env.REFRESH_TOKEN_SECRET,
+            REFRESH_TOKEN_LIFE);
+
+        if (!accessToken || !refreshToken) {
+            return res.status(HttpStatus.UNAUTHORIZED).json({
+                message: "Token generation failed",
+            })
+        }
+
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            sameSite: "None",
+            secure: true,
+            maxAge: 24 * 60 * 60 * 1000
+        })
+
+        return res.status(HttpStatus.OK).json({
+            username: user.username,
+            fullName: user.fullName,
+            role: user.role,
+            accessToken: accessToken,
+        });
     }
     catch (err) {
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -124,7 +161,78 @@ const register = async (req, res) => {
     }
 };
 
+const refresh = async (req, res) => {
+    try {
+
+        if (!req.cookies) {
+            return res.status(HttpStatus.BAD_REQUEST).json({
+                message: "Bad request",
+            })
+        }
+    
+        const refreshToken = req.cookies.refreshToken;
+        if (!refreshToken) {
+            return res.status(HttpStatus.UNAUTHORIZED).json({
+                message: "Unauthorized",
+            })
+        }
+    
+        const decodedToken = authMethods.verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        if (!decodedToken) {
+            return res.status(HttpStatus.UNAUTHORIZED).json({
+                message: "Unauthorized",
+            })
+        }
+    
+        const tokenData = {
+            username: decodedToken.payload.username,
+            role: decodedToken.payload.role,
+        }
+    
+        const accessToken = authMethods.generateToken(
+            tokenData,
+            process.env.ACCESS_TOKEN_SECRET,
+            ACCESS_TOKEN_LIFE);
+    
+        if (!accessToken) {
+            return res.status(HttpStatus.UNAUTHORIZED).json({
+                message: "Token generation failed",
+            })
+        }
+    
+        return res.status(HttpStatus.OK).json({
+            tokenData: tokenData,
+            accessToken: accessToken,
+        });
+    }
+    catch (err) {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+            message: "Internal server error",
+            error: err,
+        })
+    }
+}
+
+const logout = async (req, res) => {
+    try {
+
+        res.clearCookie("refreshToken");
+
+        return res.status(HttpStatus.OK).json({
+            message: "Logged out successfully",
+        })
+    }
+    catch (err) {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+            message: "Internal server error",
+            error: err,
+        })
+    }
+}
+
 export default {
     login,
     register,
+    refresh,
+    logout,
 };
