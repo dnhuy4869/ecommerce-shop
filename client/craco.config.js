@@ -8,6 +8,8 @@ module.exports = {
                 source: "options",
                 baseUrl: "src",
                 aliases: {
+                    "@": "./",
+                    "@components": "./components",
                     "@features": "./features",
                 }
             }
