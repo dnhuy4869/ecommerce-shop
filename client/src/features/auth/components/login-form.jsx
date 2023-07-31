@@ -3,9 +3,11 @@ import { Box, Button, FormControl, InputLabel, OutlinedInput, Stack, Typography,
 export const LoginForm = () => {
     const theme = useTheme();
 
+    
+
     return (
         <>
-            <form noValidate onSubmit={() => { }} >
+            <form onSubmit={() => { }} >
                 <FormControl fullWidth /*error={Boolean(touched.email && errors.email)}*/ sx={{ ...theme.typography.customInput }}>
                     <InputLabel htmlFor="username-login">Tên đăng nhập</InputLabel>
                     <OutlinedInput
