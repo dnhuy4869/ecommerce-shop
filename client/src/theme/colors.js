@@ -1,5 +1,5 @@
 
-export default colors = {
+const colors = {
     paper: "#ffffff",
 
     // primary
@@ -74,3 +74,5 @@ export default colors = {
     darkTextPrimary: "#bdc8f0",
     darkTextSecondary: "#8492c4",
 };
+
+export default colors;

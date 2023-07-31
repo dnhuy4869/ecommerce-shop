@@ -1,12 +1,31 @@
-import { Box, Button, FormControl, InputLabel, OutlinedInput, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Button, FormControl, InputLabel, OutlinedInput, useTheme } from "@mui/material";
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
     const theme = useTheme();
 
     return (
         <>
             <form noValidate onSubmit={() => { }} >
-                <FormControl fullWidth /*error={Boolean(touched.email && errors.email)}*/ sx={{ ...theme.typography.customInput }}>
+            <FormControl fullWidth /*error={Boolean(touched.email && errors.email)}*/ sx={{ ...theme.typography.customInput }}>
+                    <InputLabel htmlFor="fullname-login">Họ và tên</InputLabel>
+                    <OutlinedInput
+                        id="fullname-login"
+                        type="text"
+                        // value={values.email}
+                        name="fullname"
+                        // onBlur={handleBlur}
+                        // onChange={handleChange}
+                        label="Họ và tên"
+                        inputProps={{}}
+                    />
+                    {/* {touched.email && errors.email && (
+                                <FormHelperText error id="standard-weight-helper-text-email-login">
+                                    {errors.email}
+                                </FormHelperText>
+                            )} */}
+                </FormControl>
+
+            <FormControl fullWidth /*error={Boolean(touched.email && errors.email)}*/ sx={{ ...theme.typography.customInput }}>
                     <InputLabel htmlFor="username-login">Tên đăng nhập</InputLabel>
                     <OutlinedInput
                         id="username-login"
@@ -42,12 +61,6 @@ export const LoginForm = () => {
                                 </FormHelperText>
                             )} */}
                 </FormControl>
-                <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-                    <Box component="span"></Box>
-                    <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
-                        Quên mật khẩu
-                    </Typography>
-                </Stack>
                 
                 <Box sx={{ mt: 2 }}>
                     <Button disableElevation disabled={false} fullWidth
@@ -55,7 +68,7 @@ export const LoginForm = () => {
                         sx={{
                             textTransform: 'uppercase'
                         }}>
-                        Đăng nhập
+                        Đăng ký
                     </Button>
                 </Box>
                 {/* {errors.submit && (

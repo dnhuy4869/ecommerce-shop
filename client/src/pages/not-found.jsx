@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material"
 import { Link } from "react-router-dom";
 
-export default NotFound = () => {
+const NotFound = () => {
     return (
         <>
             <Box
@@ -28,3 +28,5 @@ export default NotFound = () => {
         </>
     )
 }
+
+export default NotFound;

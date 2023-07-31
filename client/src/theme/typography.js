@@ -1,5 +1,5 @@
 
-export default themeTypography = (theme) => {
+const themeTypography = (theme) => {
     return {
         fontFamily: theme?.customization?.fontFamily,
         h6: {
@@ -127,3 +127,5 @@ export default themeTypography = (theme) => {
         }
     };
 }
+
+export default themeTypography;

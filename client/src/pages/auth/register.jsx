@@ -1,16 +1,16 @@
 import { Divider, Grid, Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import { Link } from 'react-router-dom';
-import { LoginForm } from "@features/auth/components/login-form";
+import { RegisterForm } from "@features/auth/components/register-form";
 import { PageLayout } from "@components/page-layout";
 
-export const LoginPage = () => {
+export const RegisterPage = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
     return (
         <>
-            <PageLayout title="Đăng nhập">
+            <PageLayout title="Đăng ký">
                 <Grid container spacing={2} alignItems="center" justifyContent="center">
                     <Grid item xs={12}>
                         <Grid container direction={matchDownSM ? 'column-reverse' : 'row'} alignItems="center" justifyContent="center">
@@ -24,20 +24,20 @@ export const LoginPage = () => {
                         </Grid>
                     </Grid>
                     <Grid item xs={12}>
-                        <LoginForm />
+                        <RegisterForm />
                     </Grid>
                     <Grid item xs={12}>
                         <Divider />
                     </Grid>
                     <Grid item xs={12}>
                         <Grid item container direction="column" alignItems="center" xs={12}>
-                            <Typography component={Link} to="/auth/register" variant="subtitle1" sx={{
+                            <Typography component={Link} to="/auth/login" variant="subtitle1" sx={{
                                 textDecoration: 'none',
                                 '&:hover': {
                                     textDecoration: "underline",
                                 },
                             }}>
-                                Bạn chưa có tài khoản?
+                                Bạn đã có tài khoản?
                             </Typography>
                         </Grid>
                     </Grid>

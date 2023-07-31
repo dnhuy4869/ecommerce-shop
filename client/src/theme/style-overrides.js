@@ -1,5 +1,5 @@
 
-export default styleOverrides = (theme) => {
+const styleOverrides = (theme) => {
     const bgColor = theme.colors?.grey50;
     return {
         MuiButton: {
@@ -186,3 +186,5 @@ export default styleOverrides = (theme) => {
         }
     };
 }
+
+export default styleOverrides;

@@ -1,5 +1,5 @@
 
-export default themePalette = (theme) => {
+const themePalette = (theme) => {
     return {
         mode: theme?.customization?.navType,
         common: {
@@ -67,3 +67,5 @@ export default themePalette = (theme) => {
         }
     };
 }
+
+export default themePalette;

@@ -4,7 +4,7 @@ import themePalette from "./palette";
 import themeTypography from "./typography";
 import styleOverrides from "./style-overrides";
 
-export default theme = () => {
+const theme = () => {
     const themeOption = {
         colors: colors,
         heading: colors.grey900,
@@ -42,3 +42,5 @@ export default theme = () => {
 
     return theme;
 }
+
+export default theme;
