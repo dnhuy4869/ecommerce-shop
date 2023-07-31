@@ -1,6 +1,8 @@
 import { Box, Grid, styled } from "@mui/material";
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import MainCard from "@components/main-card";
+import { useAuth } from "@features/auth";
+import { useEffect } from "react";
 
 const AuthWrapper = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.primary.light,
@@ -25,6 +27,17 @@ const AuthCard = ({ children, ...other }) => (
 );
 
 export const AuthLayout = () => {
+
+    const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+
+    // If user is not logged in, nagivate to auth route
+    useEffect(() => {
+        if (isAuthenticated()) {
+            navigate("/");
+        }
+    }, []);
+
     return (
         <>
             <AuthWrapper>

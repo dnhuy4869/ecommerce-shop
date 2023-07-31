@@ -9,6 +9,7 @@ module.exports = {
                 baseUrl: "src",
                 aliases: {
                     "@": "./",
+                    "@assets": "./assets",
                     "@components": "./components",
                     "@features": "./features",
                     "@pages": "./pages",

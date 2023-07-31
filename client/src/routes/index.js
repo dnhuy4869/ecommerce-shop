@@ -1,6 +1,7 @@
 import { useRoutes } from "react-router-dom";
 import { authRoutes } from "./auth";
 import NotFound from "../pages/not-found";
+import { adminRoutes } from "./admin";
 
 const notFound = {
     path: '*',
@@ -8,5 +9,5 @@ const notFound = {
 };
 
 export const AppRoutes = () => {
-    return useRoutes([authRoutes, notFound]);
+    return useRoutes([authRoutes, adminRoutes, notFound]);
 }
