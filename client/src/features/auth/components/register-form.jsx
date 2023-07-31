@@ -1,48 +1,40 @@
-import { Box, Button, FormControl, FormHelperText, InputLabel, OutlinedInput, useTheme } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { FormInput } from "../../../components/form-input";
+import { UserSchema } from "../auth.constants";
 
 export const RegisterForm = () => {
-    const theme = useTheme();
-
-    // Validate schema from database
-    const FULLNAME_MIN_LENGTH = 3;
-    const FULLNAME_MAX_LENGTH = 60;
-
-    const USERNAME_MIN_LENGTH = 6;
-    const USERNAME_MAX_LENGTH = 50;
-
-    const PASSWORD_MIN_LENGTH = 6;
-    const PASSWORD_MAX_LENGTH = 50;
-
-    const EMAIL_MIN_LENGTH = 6;
-    const EMAIL_MAX_LENGTH = 60;
 
     const formik = useFormik({
         initialValues: {
             fullName: "",
+            email: "",
             username: "",
             password: "",
-            email: "",
+            confirmPassword: "",
         },
         validationSchema: Yup.object({
             fullName: Yup.string()
                 .required("Đây là dữ liệu bắt buộc")
-                .min(FULLNAME_MIN_LENGTH, `Cần ít nhất ${FULLNAME_MIN_LENGTH} ký tự`)
-                .max(FULLNAME_MAX_LENGTH, `Không thể vượt quá ${FULLNAME_MAX_LENGTH} ký tự`),
-            username: Yup.string()
-                .required("Đây là dữ liệu bắt buộc")
-                .min(USERNAME_MIN_LENGTH, `Cần ít nhất ${USERNAME_MIN_LENGTH} ký tự`)
-                .max(USERNAME_MAX_LENGTH, `Không thể vượt quá ${USERNAME_MAX_LENGTH} ký tự`),
-            password: Yup.string()
-                .required("Đây là dữ liệu bắt buộc")
-                .min(PASSWORD_MIN_LENGTH, `Cần ít nhất ${PASSWORD_MIN_LENGTH} ký tự`)
-                .max(PASSWORD_MAX_LENGTH, `Không thể vượt quá ${PASSWORD_MAX_LENGTH} ký tự`),
+                .min(UserSchema.FULLNAME_MIN_LENGTH, `Cần ít nhất ${UserSchema.FULLNAME_MIN_LENGTH} ký tự`)
+                .max(UserSchema.FULLNAME_MAX_LENGTH, `Không thể vượt quá ${UserSchema.FULLNAME_MAX_LENGTH} ký tự`),
             email: Yup.string()
                 .required("Đây là dữ liệu bắt buộc")
-                .min(EMAIL_MIN_LENGTH, `Cần ít nhất ${EMAIL_MIN_LENGTH} ký tự`)
-                .max(EMAIL_MAX_LENGTH, `Không thể vượt quá ${EMAIL_MAX_LENGTH} ký tự`)
+                .min(UserSchema.EMAIL_MIN_LENGTH, `Cần ít nhất ${UserSchema.EMAIL_MIN_LENGTH} ký tự`)
+                .max(UserSchema.EMAIL_MAX_LENGTH, `Không thể vượt quá ${UserSchema.EMAIL_MAX_LENGTH} ký tự`)
                 .email("Email không hợp lệ"),
+            username: Yup.string()
+                .required("Đây là dữ liệu bắt buộc")
+                .min(UserSchema.USERNAME_MIN_LENGTH, `Cần ít nhất ${UserSchema.USERNAME_MIN_LENGTH} ký tự`)
+                .max(UserSchema.USERNAME_MAX_LENGTH, `Không thể vượt quá ${UserSchema.USERNAME_MAX_LENGTH} ký tự`),
+            password: Yup.string()
+                .required("Đây là dữ liệu bắt buộc")
+                .min(UserSchema.PASSWORD_MIN_LENGTH, `Cần ít nhất ${UserSchema.PASSWORD_MIN_LENGTH} ký tự`)
+                .max(UserSchema.PASSWORD_MAX_LENGTH, `Không thể vượt quá ${UserSchema.PASSWORD_MAX_LENGTH} ký tự`),
+            confirmPassword: Yup.string()
+                .required("Đây là dữ liệu bắt buộc")
+                .oneOf([Yup.ref('password'), null], 'Mật khẩu phải trùng khớp')
         }),
         onSubmit: async (values) => {
             console.log("subbmit");
@@ -52,59 +44,60 @@ export const RegisterForm = () => {
     return (
         <>
             <form onSubmit={formik.handleSubmit} >
-                <FormControl fullWidth error={Boolean(formik.touched.fullName && formik.errors.fullName)} sx={{ ...theme.typography.customInput }}>
-                    <InputLabel htmlFor="fullname-login">Họ và tên</InputLabel>
-                    <OutlinedInput
-                        id="fullname-login"
-                        type="text"
-                        name="fullName"
-                        value={formik.values.fullName}
-                        onChange={formik.handleChange}
-                        label="Họ và tên"
-                        inputProps={{}}
-                    />
-                    {formik.touched.fullName && formik.errors.fullName && (
-                                <FormHelperText error id="standard-weight-helper-text-email-login">
-                                    {formik.errors.fullName}
-                                </FormHelperText>
-                            )}
-                </FormControl>
+                <FormInput
+                    fullWidth
+                    type='text'
+                    id="fullName-register"
+                    name="fullName"
+                    label="Họ tên"
+                    isError={Boolean(formik.touched.fullName && formik.errors.fullName)}
+                    value={formik.values.fullName}
+                    onChange={formik.handleChange}
+                    errorMessage={formik.errors.fullName} />
 
-                <FormControl fullWidth error={Boolean(formik.touched.username && formik.errors.username)} sx={{ ...theme.typography.customInput }}>
-                    <InputLabel htmlFor="username-login">Tên đăng nhập</InputLabel>
-                    <OutlinedInput
-                        id="username-login"
-                        type="text"
-                        name="username"
-                        value={formik.values.username}
-                        onChange={formik.handleChange}
-                        label="Tên đăng nhập"
-                        inputProps={{}}
-                    />
-                    {formik.touched.username && formik.errors.username && (
-                                <FormHelperText error id="standard-weight-helper-text-email-login">
-                                    {formik.errors.username}
-                                </FormHelperText>
-                            )}
-                </FormControl>
+                <FormInput
+                    fullWidth
+                    type='text'
+                    id="email-register"
+                    name="email"
+                    label="Email"
+                    isError={Boolean(formik.touched.email && formik.errors.email)}
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    errorMessage={formik.errors.email} />
 
-                <FormControl fullWidth /*error={Boolean(touched.password && errors.password)}*/ sx={{ ...theme.typography.customInput }}>
-                    <InputLabel htmlFor="password-login">Mật khẩu</InputLabel>
-                    <OutlinedInput
-                        id="password-login"
-                        type='password'
-                        // value={values.password}
-                        name="password"
-                        // onBlur={handleBlur}
-                        // onChange={handleChange}
-                        label="Mật khẩu"
-                    />
-                    {/* {touched.password && errors.password && (
-                                <FormHelperText error id="standard-weight-helper-text-password-login">
-                                    {errors.password}
-                                </FormHelperText>
-                            )} */}
-                </FormControl>
+                <FormInput
+                    fullWidth
+                    type='text'
+                    id="username-register"
+                    name="username"
+                    label="Tên đăng nhập"
+                    isError={Boolean(formik.touched.username && formik.errors.username)}
+                    value={formik.values.username}
+                    onChange={formik.handleChange}
+                    errorMessage={formik.errors.username} />
+
+                <FormInput
+                    fullWidth
+                    type='password'
+                    id="password-register"
+                    name="password"
+                    label="Mật khẩu"
+                    isError={Boolean(formik.touched.password && formik.errors.password)}
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    errorMessage={formik.errors.password} />
+
+                <FormInput
+                    fullWidth
+                    type='password'
+                    id="confirmPassword-register"
+                    name="confirmPassword"
+                    label="Nhập lại mật khẩu"
+                    isError={Boolean(formik.touched.confirmPassword && formik.errors.confirmPassword)}
+                    value={formik.values.confirmPassword}
+                    onChange={formik.handleChange}
+                    errorMessage={formik.errors.confirmPassword} />
 
                 <Box sx={{ mt: 2 }}>
                     <Button disableElevation disabled={false} fullWidth

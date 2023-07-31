@@ -1,0 +1,14 @@
+// Validate schema from database
+export const UserSchema = {
+    FULLNAME_MIN_LENGTH: 3,
+    FULLNAME_MAX_LENGTH: 60,
+
+    USERNAME_MIN_LENGTH: 6,
+    USERNAME_MAX_LENGTH: 50,
+
+    PASSWORD_MIN_LENGTH: 6,
+    PASSWORD_MAX_LENGTH: 50,
+
+    EMAIL_MIN_LENGTH: 6,
+    EMAIL_MAX_LENGTH: 60,
+}
