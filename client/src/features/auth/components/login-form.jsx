@@ -1,10 +1,18 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, FormHelperText, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FormInput } from "../../../components/form-input";
 import { UserSchema } from "../auth.constants";
+import { useState } from "react";
+import { login } from "../api/login";
 
-export const LoginForm = () => {
+export const LoginForm = ({ onSuccess }) => {
+
+    const [status, setStatus] = useState({
+        isError: false,
+        errorMessage: "",
+        isSubmit: false,
+    });
 
     const formik = useFormik({
         initialValues: {
@@ -22,7 +30,25 @@ export const LoginForm = () => {
                 .max(UserSchema.PASSWORD_MAX_LENGTH, `Không thể vượt quá ${UserSchema.PASSWORD_MAX_LENGTH} ký tự`),
         }),
         onSubmit: async (values) => {
-            console.log("subbmit");
+            setStatus(prevState => ({
+                ...prevState,
+                isSubmit: true
+            }));
+
+            const data = {
+                username: values.username,
+                password: values.password,
+            }
+
+            const loginData = login(data);
+            console.log(loginData);
+
+            setStatus(prevState => ({
+                ...prevState,
+                isSubmit: false,
+            }));
+
+            onSuccess();
         },
     })
 
@@ -59,7 +85,7 @@ export const LoginForm = () => {
                 </Stack>
 
                 <Box sx={{ mt: 2 }}>
-                    <Button disableElevation disabled={false} fullWidth
+                    <Button disableElevation disabled={status.isSubmit} fullWidth
                         size="large" type="submit" variant="contained" color="secondary"
                         sx={{
                             textTransform: 'uppercase'
@@ -67,11 +93,11 @@ export const LoginForm = () => {
                         Đăng nhập
                     </Button>
                 </Box>
-                {/* {errors.submit && (
-                            <Box sx={{ mt: 3 }}>
-                                <FormHelperText error>{errors.submit}</FormHelperText>
-                            </Box>
-                        )} */}
+                {status.errorMessage && (
+                    <Box sx={{ mt: 0.5 }}>
+                        <FormHelperText error sx={{ fontSize: '0.8rem' }}>{status.errorMessage}</FormHelperText>
+                    </Box>
+                )}
             </form>
         </>
     )

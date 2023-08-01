@@ -8,6 +8,10 @@ export const LoginPage = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
+    const onLoginSucces = () => {
+        
+    }
+
     return (
         <>
             <PageLayout title="Đăng nhập">
@@ -24,7 +28,7 @@ export const LoginPage = () => {
                         </Grid>
                     </Grid>
                     <Grid item xs={12}>
-                        <LoginForm />
+                        <LoginForm onSuccess={onLoginSucces} />
                     </Grid>
                     <Grid item xs={12}>
                         <Divider />

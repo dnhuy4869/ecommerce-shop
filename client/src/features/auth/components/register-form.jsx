@@ -1,10 +1,17 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, FormHelperText } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FormInput } from "../../../components/form-input";
 import { UserSchema } from "../auth.constants";
+import { useState } from "react";
 
-export const RegisterForm = () => {
+export const RegisterForm = ({ onSuccess }) => {
+
+    const [status, setStatus] = useState({
+        isError: false,
+        errorMessage: "",
+        isSubmit: false,
+    });
 
     const formik = useFormik({
         initialValues: {
@@ -37,7 +44,19 @@ export const RegisterForm = () => {
                 .oneOf([Yup.ref('password'), null], 'Mật khẩu phải trùng khớp')
         }),
         onSubmit: async (values) => {
-            console.log("subbmit");
+            setStatus(prevState => ({
+                ...prevState,
+                isSubmit: true
+            }));
+
+
+
+            setStatus(prevState => ({
+                ...prevState,
+                isSubmit: false,
+            }));
+
+            onSuccess();
         },
     })
 
@@ -100,7 +119,7 @@ export const RegisterForm = () => {
                     errorMessage={formik.errors.confirmPassword} />
 
                 <Box sx={{ mt: 2 }}>
-                    <Button disableElevation disabled={false} fullWidth
+                    <Button disableElevation disabled={status.isSubmit} fullWidth
                         size="large" type="submit" variant="contained" color="secondary"
                         sx={{
                             textTransform: 'uppercase'
@@ -108,11 +127,11 @@ export const RegisterForm = () => {
                         Đăng ký
                     </Button>
                 </Box>
-                {/* {errors.submit && (
-                            <Box sx={{ mt: 3 }}>
-                                <FormHelperText error>{errors.submit}</FormHelperText>
-                            </Box>
-                        )} */}
+                {status.errorMessage && (
+                    <Box sx={{ mt: 0.5 }}>
+                        <FormHelperText error sx={{ fontSize: '0.8rem' }}>{status.errorMessage}</FormHelperText>
+                    </Box>
+                )}
             </form>
         </>
     )

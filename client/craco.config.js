@@ -14,6 +14,7 @@ module.exports = {
                     "@features": "./features",
                     "@pages": "./pages",
                     "@layouts": "./layouts",
+                    "@lib": "./lib",
                 }
             }
         }

@@ -8,6 +8,10 @@ export const RegisterPage = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
+    const onRegisterSucces = () => {
+        
+    }
+
     return (
         <>
             <PageLayout title="Đăng ký">
@@ -24,7 +28,7 @@ export const RegisterPage = () => {
                         </Grid>
                     </Grid>
                     <Grid item xs={12}>
-                        <RegisterForm />
+                        <RegisterForm onSuccess={onRegisterSucces} />
                     </Grid>
                     <Grid item xs={12}>
                         <Divider />

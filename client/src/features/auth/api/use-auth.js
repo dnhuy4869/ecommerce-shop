@@ -14,5 +14,9 @@ export const useAuth = () => {
         return user !== null;
     };
 
-    return { user, isAuthenticated };
+    const setLocalUser = (data) => {
+        localStorage.setItem('user', JSON.stringify(data));
+    }
+
+    return { user, setLocalUser, isAuthenticated };
 }
