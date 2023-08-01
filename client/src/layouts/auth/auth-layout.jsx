@@ -29,14 +29,14 @@ const AuthCard = ({ children, ...other }) => (
 export const AuthLayout = () => {
 
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
+    const { user, isAuthenticated } = useAuth();
 
-    // If user is not logged in, nagivate to auth route
+    // If user is logged in, nagivate to public route
     useEffect(() => {
-        if (isAuthenticated()) {
+        if ((isAuthenticated())) {
             navigate("/");
         }
-    }, []);
+    }, [user]);
 
     return (
         <>

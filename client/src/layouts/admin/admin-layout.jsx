@@ -64,7 +64,7 @@ export const AdminLayout = () => {
         if (!user || !user.role !== "admin") {
             navigate("/");
         }
-    }, []);
+    }, [user]);
 
     return (
         <>

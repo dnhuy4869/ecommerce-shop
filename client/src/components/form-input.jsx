@@ -1,10 +1,11 @@
 import { FormControl, FormHelperText, InputLabel, OutlinedInput, useTheme } from "@mui/material";
 import { useState } from "react";
 
-export const FormInput = ({ type, id, name, label, isError, value, onChange, errorMessage, ...others }) => {
+export const FormInput = ({ 
+    type, id, name, label, isError, value, onChange, errorMessage,
+    readOnly, setReadOnly,
+    ...others }) => {
     const theme = useTheme();
-
-    const [readOnly, setReadOnly] = useState(true)
 
     return (
         <>
@@ -22,13 +23,6 @@ export const FormInput = ({ type, id, name, label, isError, value, onChange, err
                     label={label}
                     readOnly={readOnly}
                     onFocus={e => setReadOnly(false)}
-                    sx={{
-                        '& input': {
-                            textSecurity: 'disc',
-                            '-moz-text-security': 'disc',
-                            '-webkit-text-security': 'disc',
-                        },
-                    }}
                 />
                 {isError && (
                     <FormHelperText

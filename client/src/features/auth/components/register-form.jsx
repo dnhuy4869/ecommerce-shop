@@ -60,11 +60,15 @@ export const RegisterForm = ({ onSuccess }) => {
         },
     })
 
+    const [readOnly, setReadOnly] = useState(true)
+
     return (
         <>
             <form onSubmit={formik.handleSubmit} >
                 <FormInput
                     fullWidth
+                    readOnly={readOnly}
+                    setReadOnly={setReadOnly}
                     type='text'
                     id="fullName-register"
                     name="fullName"
@@ -76,6 +80,8 @@ export const RegisterForm = ({ onSuccess }) => {
 
                 <FormInput
                     fullWidth
+                    readOnly={readOnly}
+                    setReadOnly={setReadOnly}
                     type='text'
                     id="email-register"
                     name="email"
@@ -87,6 +93,8 @@ export const RegisterForm = ({ onSuccess }) => {
 
                 <FormInput
                     fullWidth
+                    readOnly={readOnly}
+                    setReadOnly={setReadOnly}
                     type='text'
                     id="username-register"
                     name="username"
@@ -98,6 +106,8 @@ export const RegisterForm = ({ onSuccess }) => {
 
                 <FormInput
                     fullWidth
+                    readOnly={readOnly}
+                    setReadOnly={setReadOnly}
                     type='password'
                     id="password-register"
                     name="password"
@@ -109,6 +119,8 @@ export const RegisterForm = ({ onSuccess }) => {
 
                 <FormInput
                     fullWidth
+                    readOnly={readOnly}
+                    setReadOnly={setReadOnly}
                     type='password'
                     id="confirmPassword-register"
                     name="confirmPassword"

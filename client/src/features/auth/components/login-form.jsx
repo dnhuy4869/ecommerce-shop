@@ -5,6 +5,7 @@ import { FormInput } from "../../../components/form-input";
 import { UserSchema } from "../auth.constants";
 import { useState } from "react";
 import { login } from "../api/login";
+import { useAuth } from "../api/use-auth";
 
 export const LoginForm = ({ onSuccess }) => {
 
@@ -13,6 +14,8 @@ export const LoginForm = ({ onSuccess }) => {
         errorMessage: "",
         isSubmit: false,
     });
+
+    const { setLocalUser } = useAuth();
 
     const formik = useFormik({
         initialValues: {
@@ -40,23 +43,39 @@ export const LoginForm = ({ onSuccess }) => {
                 password: values.password,
             }
 
-            const loginData = login(data);
-            console.log(loginData);
+            const loginData = await login(data);
+            //console.log(loginData);
+
+            if (!loginData.isSuccess) {
+                setStatus(prevState => ({
+                    isError: true,
+                    errorMessage: loginData.response.message,
+                    isSubmit: false,
+                }));
+
+                return;
+            }
 
             setStatus(prevState => ({
                 ...prevState,
                 isSubmit: false,
             }));
 
+            setLocalUser(loginData.response);
+
             onSuccess();
         },
     })
+
+    const [readOnly, setReadOnly] = useState(true)
 
     return (
         <>
             <form onSubmit={formik.handleSubmit} >
                 <FormInput
                     fullWidth
+                    readOnly={readOnly}
+                    setReadOnly={setReadOnly}
                     type='text'
                     id="username-register"
                     name="username"
@@ -68,6 +87,8 @@ export const LoginForm = ({ onSuccess }) => {
 
                 <FormInput
                     fullWidth
+                    readOnly={readOnly}
+                    setReadOnly={setReadOnly}
                     type='password'
                     id="password-register"
                     name="password"

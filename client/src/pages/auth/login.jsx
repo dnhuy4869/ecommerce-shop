@@ -1,6 +1,6 @@
 import { Divider, Grid, Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LoginForm } from "@features/auth/components/login-form";
 import { PageLayout } from "@components/page-layout";
 
@@ -8,8 +8,10 @@ export const LoginPage = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
+    const navigate = useNavigate();
+
     const onLoginSucces = () => {
-        
+        navigate("/");
     }
 
     return (

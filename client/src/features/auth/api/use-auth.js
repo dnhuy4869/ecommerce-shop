@@ -16,6 +16,11 @@ export const useAuth = () => {
 
     const setLocalUser = (data) => {
         localStorage.setItem('user', JSON.stringify(data));
+
+        const currUser = localStorage.getItem('user');
+        if (currUser) {
+            setUser(JSON.parse(currUser));
+        }
     }
 
     return { user, setLocalUser, isAuthenticated };
