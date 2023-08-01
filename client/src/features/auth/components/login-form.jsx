@@ -15,7 +15,7 @@ export const LoginForm = ({ onSuccess }) => {
         isSubmit: false,
     });
 
-    const { setLocalUser } = useAuth();
+    const { user, setLocalUser } = useAuth();
 
     const formik = useFormik({
         initialValues: {

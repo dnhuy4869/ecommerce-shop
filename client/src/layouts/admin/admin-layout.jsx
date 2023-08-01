@@ -5,8 +5,8 @@ import { DRAWER_WIDTH } from "./admin-layout.constants";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar/sidebar";
-import { useAuth } from "@features/auth";
 import { useEffect } from "react";
+import { useAuth } from "../../features/auth/api/use-auth";
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
     ...theme.typography.mainContent,
@@ -57,11 +57,12 @@ export const AdminLayout = () => {
 
     // If user is not logged in, nagivate to auth route
     useEffect(() => {
+        console.log('user:', user);
         if (!isAuthenticated()) {
-            navigate("/auth/login");
+            return navigate("/auth/login");
         }
 
-        if (!user || !user.role !== "admin") {
+        if (user.role !== "admin") {
             navigate("/");
         }
     }, [user]);

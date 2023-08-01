@@ -47,7 +47,7 @@ export const MenuItem = ({ item, level }) => {
                     pl: `${level * 24}px`
                 }}
                 selected={isItemActive(item)}
-                onClick={itemHandler(item)}
+                onClick={() => itemHandler(item)}
             >
                 <ListItemIcon sx={{ my: 'auto', minWidth: !item?.icon ? 18 : 36 }}>{item.icon}</ListItemIcon>
                 <ListItemText

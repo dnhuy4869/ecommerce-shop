@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom"
 import MainCard from "@components/main-card";
 import { useAuth } from "@features/auth";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const AuthWrapper = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.primary.light,
@@ -29,11 +30,11 @@ const AuthCard = ({ children, ...other }) => (
 export const AuthLayout = () => {
 
     const navigate = useNavigate();
-    const { user, isAuthenticated } = useAuth();
+    const { user } = useAuth();
 
     // If user is logged in, nagivate to public route
     useEffect(() => {
-        if ((isAuthenticated())) {
+        if (user) {
             navigate("/");
         }
     }, [user]);

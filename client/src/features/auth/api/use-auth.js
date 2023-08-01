@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react';
+import { logout } from './logout';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from "../auth.slice";
 
 export const useAuth = () => {
-    const [user, setUser] = useState(null);
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user);
 
     useEffect(() => {
-        const currUser = localStorage.getItem('user');
-        if (currUser) {
-            setUser(JSON.parse(currUser));
+        if (!user) {
+            const currUser = localStorage.getItem('user');
+            if (currUser) {
+                dispatch(setUser(JSON.parse(currUser)));
+            }
         }
     }, []);
 
@@ -16,12 +22,15 @@ export const useAuth = () => {
 
     const setLocalUser = (data) => {
         localStorage.setItem('user', JSON.stringify(data));
-
-        const currUser = localStorage.getItem('user');
-        if (currUser) {
-            setUser(JSON.parse(currUser));
-        }
+        dispatch(setUser(data));
     }
 
-    return { user, setLocalUser, isAuthenticated };
+    const logoutUser = async () => {
+        await logout();
+
+        localStorage.removeItem("user");
+        dispatch(setUser(null));
+    }
+
+    return { user, setLocalUser, logoutUser, isAuthenticated };
 }

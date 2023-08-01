@@ -49,7 +49,12 @@ export const RegisterForm = ({ onSuccess }) => {
                 isSubmit: true
             }));
 
-
+            const data = {
+                fullName: values.fullName,
+                username: values.username,
+                password: values.password,
+                
+            }
 
             setStatus(prevState => ({
                 ...prevState,

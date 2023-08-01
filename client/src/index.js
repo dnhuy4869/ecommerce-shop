@@ -7,6 +7,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import theme from './theme';
 import store from "./app/store";
 import { Provider } from 'react-redux';
+import { Layout } from './components/layout';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,8 +15,10 @@ root.render(
         <Provider store={store}>
             <ThemeProvider theme={theme()}>
                 <BrowserRouter>
-                    <CssBaseline />
-                    <AppRoutes />
+                    <Layout>
+                        <CssBaseline />
+                        <AppRoutes />
+                    </Layout>
                 </BrowserRouter>
             </ThemeProvider>
         </Provider>

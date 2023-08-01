@@ -2,7 +2,7 @@ import { AppBar, Avatar, Box, ButtonBase, Toolbar, useTheme } from '@mui/materia
 import MenuIcon from '@mui/icons-material/Menu';
 import { useSelector } from 'react-redux';
 import { DRAWER_WIDTH } from "../admin-layout.constants";
-import { Profile } from './profile';
+import { Profile } from '@components/profile';
 import { Logo } from "../logo";
 import { Notification } from "./notification";
 

@@ -4,6 +4,8 @@ import User1 from '@assets/profile-default.png';
 import { useState } from "react";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import { useAuth } from "@features/auth";
+import { useNavigate } from "react-router-dom";
 
 export const Profile = () => {
     const theme = useTheme();
@@ -18,16 +20,27 @@ export const Profile = () => {
         setAnchorElUser(null);
     };
 
+    const { user, logoutUser } = useAuth();
+    const nagivate = useNavigate();
+
+    const logout = async () => {
+        await logoutUser();
+
+        nagivate("/auth/login");
+    }
+
     const buttons = [
         {
             icon: <PersonOutlineOutlinedIcon />,
             text: "Tài khoản",
             href: "/",
+            onClick: () => { }
         },
         {
             icon: <LogoutOutlinedIcon />,
             text: "Đăng xuất",
             href: "/",
+            onClick: () => { logout() }
         },
     ]
 
@@ -119,7 +132,10 @@ export const Profile = () => {
                     {buttons.map((button, index) => (
                         <ListItemButton
                             key={index}
-                            onClick={handleCloseUserMenu}
+                            onClick={() => {
+                                button.onClick();
+                                handleCloseUserMenu();
+                            }}
                             sx={{ borderRadius: `12px` }}
                         >
                             <ListItemIcon>
