@@ -1,4 +1,4 @@
-import UserModel from "../user/user.model.js";
+import UserModel from "./user.model.js";
 import { isValidEmail, isValidStringData } from "../utils/validator.js";
 
 const validateFullName = (data) => {
