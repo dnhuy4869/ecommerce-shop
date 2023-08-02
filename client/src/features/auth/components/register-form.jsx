@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { FormInput } from "../../../components/form-input";
 import { UserSchema } from "../auth.constants";
 import { useState } from "react";
+import { register } from "../api/register";
 
 export const RegisterForm = ({ onSuccess }) => {
 
@@ -51,9 +52,21 @@ export const RegisterForm = ({ onSuccess }) => {
 
             const data = {
                 fullName: values.fullName,
+                email: values.email,
                 username: values.username,
                 password: values.password,
-                
+            }
+
+            const registerData = await register(data);
+
+            if (!registerData.isSuccess) {
+                setStatus(prevState => ({
+                    isError: true,
+                    errorMessage: registerData.response.message,
+                    isSubmit: false,
+                }));
+
+                return;
             }
 
             setStatus(prevState => ({

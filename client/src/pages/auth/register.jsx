@@ -1,15 +1,21 @@
 import { Divider, Grid, Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { RegisterForm } from "@features/auth/components/register-form";
 import { PageLayout } from "@components/page-layout";
+import { setRegisterRedirect } from "@layouts/auth";
+import { useDispatch } from "react-redux";
 
 export const RegisterPage = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
+    const navigate = useNavigate();
+    const dispath = useDispatch();
+
     const onRegisterSucces = () => {
-        
+        dispath(setRegisterRedirect(true));
+        navigate("/auth/login");
     }
 
     return (
