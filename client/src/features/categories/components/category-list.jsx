@@ -50,7 +50,7 @@ export const CategoryList = () => {
 
     return (
         <>
-            {/* <DataTable title="Loại hàng" headCells={headCells} rows={allCategories} /> */}
+            <DataTable title="Loại hàng" headCells={headCells} rows={allCategories} />
         </>
     )
 }

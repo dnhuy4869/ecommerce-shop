@@ -57,7 +57,6 @@ export const AdminLayout = () => {
 
     // If user is not logged in, nagivate to auth route
     useEffect(() => {
-        console.log('user:', user);
         if (!isAuthenticated()) {
             return navigate("/auth/login");
         }

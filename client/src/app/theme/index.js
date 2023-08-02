@@ -3,6 +3,7 @@ import colors from "./colors";
 import themePalette from "./palette";
 import themeTypography from "./typography";
 import styleOverrides from "./style-overrides";
+import { viVN } from '@mui/material/locale';
 
 const theme = () => {
     const themeOption = {
@@ -34,10 +35,10 @@ const theme = () => {
                 }
             }
         },
-        typography: themeTypography(themeOption)
+        typography: themeTypography(themeOption),
     };
 
-    const theme = createTheme(themeOptions);
+    const theme = createTheme(themeOptions, viVN);
     theme.components = styleOverrides(themeOption);
 
     return theme;

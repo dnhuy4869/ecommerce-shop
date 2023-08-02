@@ -35,6 +35,23 @@ export const Profile = () => {
         nagivate("/auth/login");
     }
 
+    const getRole = () => {
+        if (!user || !user.role) {
+            return "";
+        }
+
+        switch (user.role) {
+            case "customer":
+                return "Khách hàng";
+            case "admin":
+                return "Quản trị viên";
+            default: 
+            return "Khách hàng";
+        }
+
+        return "";
+    }
+
     const buttons = [
         {
             icon: <PersonOutlineOutlinedIcon />,
@@ -115,7 +132,9 @@ export const Profile = () => {
                                 Ngọc Huy
                             </Typography>
                         </Stack>
-                        <Typography variant="subtitle2">Quản trị viên</Typography>
+                        <Typography variant="subtitle2">
+                           {getRole()}
+                        </Typography>
                     </Stack>
                 </Box>
                 <Divider />

@@ -2,7 +2,7 @@ import { ListItemButton, ListItemIcon, ListItemText, Typography, useMediaQuery, 
 import { forwardRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { setSelectedMenu, setSidebarOpened } from "../admin-layout.slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const MenuItem = ({ item, level }) => {
     const theme = useTheme();
@@ -10,13 +10,15 @@ export const MenuItem = ({ item, level }) => {
     const matchesSM = useMediaQuery(theme.breakpoints.down('md'));
     const dispatch = useDispatch();
 
+    const selectedMenu = useSelector(state => state.adminLayout.selectedMenu);
+
     const isItemActive = (item) => {
         return pathname.includes(item.path);
     }
 
     // active menu item on page load
     useEffect(() => {
-        if (isItemActive(item)) {
+        if (!selectedMenu && isItemActive(item)) {
             dispatch(setSelectedMenu(item.path));
         }
 

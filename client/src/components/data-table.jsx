@@ -110,60 +110,73 @@ DataTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-function DataTableToolbar(props) {
-    const { numSelected, title } = props;
-
+const DataTableTitle = ({ title }) => {
     return (
         <Toolbar
             sx={{
                 pl: { sm: 2 },
                 pr: { xs: 1, sm: 1 },
-                ...(numSelected > 0 && {
-                    bgcolor: (theme) =>
-                        alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-                }),
             }}
         >
-            {numSelected > 0 ? (
-                <Typography
-                    sx={{ flex: '1 1 100%' }}
-                    color="inherit"
-                    variant="subtitle1"
-                    component="div"
-                >
-                    {numSelected} selected
-                </Typography>
-            ) : (
-                <Typography
-                    sx={{ flex: '1 1 100%' }}
-                    variant="h6"
-                    id="tableTitle"
-                    component="div"
-                >
-                    {title}
-                </Typography>
-            )}
+            <Typography
+                sx={{ flex: '1 1 100%' }}
+                variant="h4"
+                id="tableTitle"
+                component="div"
+            >
+                {title}
+            </Typography>
 
-            {numSelected > 0 ? (
-                <Tooltip title="Delete">
-                    <IconButton>
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <FilterListIcon />
-                    </IconButton>
-                </Tooltip>
-            )}
+            <Tooltip title="Filter list">
+                <IconButton>
+                    <FilterListIcon />
+                </IconButton>
+            </Tooltip>
         </Toolbar>
     );
 }
 
-DataTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-};
+const DataTableSearch = () => {
+    return (
+        <>
+            
+        </>
+    )
+}
+
+const DataTableSelect = ({ numSelected }) => {
+    return (
+        <>
+            {
+                numSelected > 0 && (
+                    <Toolbar
+                        sx={{
+                            pl: { sm: 2 },
+                            pr: { xs: 1, sm: 1 },
+                            paddingY: 1,
+                            bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+                        }}
+                    >
+                        <Typography
+                            sx={{ flex: '1 1 100%' }}
+                            color="inherit"
+                            variant="subtitle1"
+                            component="div"
+                        >
+                            Đã chọn {numSelected}
+                        </Typography>
+
+                        <Tooltip title="Delete">
+                            <IconButton>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </Toolbar>
+                )
+            }
+        </>
+    )
+}
 
 export const DataTable = ({ headCells, rows, title }) => {
     const [order, setOrder] = React.useState('asc');
@@ -234,7 +247,10 @@ export const DataTable = ({ headCells, rows, title }) => {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <DataTableToolbar numSelected={selected.length} title={title} />
+                <DataTableTitle title={title} />
+                <DataTableSearch />
+                <DataTableSelect numSelected={selected.length} />
+
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -310,6 +326,8 @@ export const DataTable = ({ headCells, rows, title }) => {
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
+                    labelRowsPerPage="Số hàng mỗi trang:"
+                    labelDisplayedRows={({ from, to, count }) => `${from}-${to} của ${count}`}
                 />
             </Paper>
         </Box>
