@@ -12,9 +12,13 @@ const adminLayoutSlice = createSlice({
         },
         setSelectedMenu: (state, action) => {
             state.selectedMenu = action.payload;
+        },
+        resetLayout: (state, action) => {
+            state.isSidebarOpened = true;
+            state.selectedMenu = '';
         }
     }
 })
 
-export const { setSidebarOpened, setSelectedMenu } = adminLayoutSlice.actions;
+export const { setSidebarOpened, setSelectedMenu, resetLayout } = adminLayoutSlice.actions;
 export const adminLayoutReducer = adminLayoutSlice.reducer;

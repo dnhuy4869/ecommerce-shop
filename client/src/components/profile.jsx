@@ -6,6 +6,8 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { useAuth } from "@features/auth";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { resetLayout } from "@layouts/admin";
 
 export const Profile = () => {
     const theme = useTheme();
@@ -21,10 +23,14 @@ export const Profile = () => {
     };
 
     const { user, logoutUser } = useAuth();
+
     const nagivate = useNavigate();
+    const dispatch = useDispatch();
 
     const logout = async () => {
         await logoutUser();
+
+        dispatch(resetLayout());
 
         nagivate("/auth/login");
     }

@@ -1,4 +1,4 @@
-import { AuthLayout } from "../layouts/auth";
+import { AuthLayout } from "@layouts/auth";
 import { LoginPage } from "@pages/auth/login";
 import { RegisterPage } from "@pages/auth/register";
  
