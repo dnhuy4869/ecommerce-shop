@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
+import { alpha, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -157,6 +157,8 @@ const DataTableSearch = ({ searchOptions }) => {
         }
     }, []);
 
+    const theme = useTheme();
+
     return (
         <>
             <Toolbar
@@ -166,7 +168,12 @@ const DataTableSearch = ({ searchOptions }) => {
                     paddingBottom: 2,
                     display: 'flex',
                     alignItems: "center",
-                    justifyContent: "space-between"
+                    justifyContent: "space-between",
+                    [theme.breakpoints.down('lg')]: {
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        gap: 1.5,
+                    },
                 }}
             >
                 <OutlinedInput
@@ -174,10 +181,13 @@ const DataTableSearch = ({ searchOptions }) => {
                     value={keyword}
                     onChange={e => setKeyword(e.target.value)}
                     sx={{
-                        minWidth: 500,
+                        minWidth: '50%',
                         background: "#fff",
                         "& input": {
                             backgroundColor: "#fff",
+                        },
+                        [theme.breakpoints.down('lg')]: {
+                            minWidth: "100%",
                         },
                     }}
                     startAdornment={
@@ -190,14 +200,20 @@ const DataTableSearch = ({ searchOptions }) => {
                     display: "flex",
                     alignItems: 'center',
                     flexDirection: "row",
-                    gap: 1
+                    gap: 1,
+                    [theme.breakpoints.down('lg')]: {
+                        minWidth: "100%",
+                    },
                 }}>
                     <Typography variant='h5' >Lọc theo</Typography>
                     <Select
                         value={option}
                         onChange={e => setOption(e.target.value)}
-                        sx={{
+                        sx={{ 
                             minWidth: 180,
+                            [theme.breakpoints.down('lg')]: {
+                                minWidth: "90%",
+                            }, 
                         }}
                     >
                         {

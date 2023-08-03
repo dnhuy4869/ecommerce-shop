@@ -6,6 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { pink } from "@mui/material/colors";
 import { Link } from "react-router-dom";
 import { ConfirmDialog } from "@components/confirm-dialog";
+import { useSnackbar } from "notistack";
 
 export const CategoryList = () => {
 
@@ -63,6 +64,7 @@ export const CategoryList = () => {
     //const rows = useMemo(() => allCategories, [allCategories]);
 
     const [openDialog, setOpenDialog] = useState(false);
+    const { enqueueSnackbar } = useSnackbar();
 
     const handleDialogClose = () => {
         setOpenDialog(false);
@@ -70,6 +72,7 @@ export const CategoryList = () => {
 
     const handleDialogConfirm = () => {
         setOpenDialog(false);
+        enqueueSnackbar("Xóa thành công", { variant: 'success' });
     }
 
     const renderRows = (idField, visibleRows, emptyRows, isSelected, handleSelect) => {

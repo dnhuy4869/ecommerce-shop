@@ -8,18 +8,24 @@ import theme from './app/theme';
 import store from "./app/store";
 import { Provider } from 'react-redux';
 import { Layout } from './components/layout';
+import { SnackbarProvider } from 'notistack';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <Provider store={store}>
             <ThemeProvider theme={theme()}>
-                <BrowserRouter>
-                    <Layout>
-                        <CssBaseline />
-                        <AppRoutes />
-                    </Layout>
-                </BrowserRouter>
+                <SnackbarProvider anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}>
+                    <BrowserRouter>
+                        <Layout>
+                            <CssBaseline />
+                            <AppRoutes />
+                        </Layout>
+                    </BrowserRouter>
+                </SnackbarProvider>
             </ThemeProvider>
         </Provider>
     </React.StrictMode>
