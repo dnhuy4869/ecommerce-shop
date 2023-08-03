@@ -21,6 +21,10 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import AddIcon from '@mui/icons-material/Add';
+import { Button, FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, TextField } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { Link } from 'react-router-dom';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -75,17 +79,18 @@ function DataTableHead(props) {
                         }}
                     />
                 </TableCell>
-                {headCells.map((headCell) => (
+                {headCells.map((headCell, index) => (
                     <TableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
+                        padding={index === 0 ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
+                            onClick={headCell.disableSort ? null : createSortHandler(headCell.id)}
+                            hideSortIcon={headCell.disableSort}
                         >
                             {headCell.label}
                             {orderBy === headCell.id ? (
@@ -114,8 +119,7 @@ const DataTableTitle = ({ title }) => {
     return (
         <Toolbar
             sx={{
-                pl: { sm: 2 },
-                pr: { xs: 1, sm: 1 },
+                px: 2,
             }}
         >
             <Typography
@@ -127,19 +131,85 @@ const DataTableTitle = ({ title }) => {
                 {title}
             </Typography>
 
-            <Tooltip title="Filter list">
-                <IconButton>
-                    <FilterListIcon />
-                </IconButton>
-            </Tooltip>
+            <Button component={Link} to="add"
+                variant="contained"
+                color="secondary"
+                startIcon={<AddIcon />}
+                sx={{
+                    textTransform: 'initial',
+                    px: 1,
+                    py: 1,
+                    minWidth: 120
+                }}>
+                Thêm mới
+            </Button>
         </Toolbar>
     );
 }
 
-const DataTableSearch = () => {
+const DataTableSearch = ({ searchOptions }) => {
+    const [keyword, setKeyword] = React.useState('');
+    const [option, setOption] = React.useState('');
+
+    React.useEffect(() => {
+        if (!option || option === "") {
+            setOption(searchOptions[0].value);
+        }
+    }, []);
+
     return (
         <>
-            
+            <Toolbar
+                sx={{
+                    px: 2,
+                    paddingTop: 0,
+                    paddingBottom: 2,
+                    display: 'flex',
+                    alignItems: "center",
+                    justifyContent: "space-between"
+                }}
+            >
+                <OutlinedInput
+                    type="text"
+                    value={keyword}
+                    onChange={e => setKeyword(e.target.value)}
+                    sx={{
+                        minWidth: 500,
+                        background: "#fff",
+                        "& input": {
+                            backgroundColor: "#fff",
+                        },
+                    }}
+                    startAdornment={
+                        <InputAdornment position="start">
+                            <SearchIcon />
+                        </InputAdornment>
+                    } />
+
+                <FormControl variant="outlined" sx={{
+                    display: "flex",
+                    alignItems: 'center',
+                    flexDirection: "row",
+                    gap: 1
+                }}>
+                    <Typography variant='h5' >Lọc theo</Typography>
+                    <Select
+                        value={option}
+                        onChange={e => setOption(e.target.value)}
+                        sx={{
+                            minWidth: 180,
+                        }}
+                    >
+                        {
+                            searchOptions && searchOptions.map((optionData, index) => {
+                                return (
+                                    <MenuItem key={index} value={optionData.value}>{optionData.name}</MenuItem>
+                                )
+                            })
+                        }
+                    </Select>
+                </FormControl>
+            </Toolbar>
         </>
     )
 }
@@ -151,8 +221,7 @@ const DataTableSelect = ({ numSelected }) => {
                 numSelected > 0 && (
                     <Toolbar
                         sx={{
-                            pl: { sm: 2 },
-                            pr: { xs: 1, sm: 1 },
+                            px: 2,
                             paddingY: 1,
                             bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
                         }}
@@ -178,9 +247,11 @@ const DataTableSelect = ({ numSelected }) => {
     )
 }
 
-export const DataTable = ({ headCells, rows, title }) => {
+export const DataTable = ({
+    idField, headCells, rows, title, searchOptions, renderRows
+}) => {
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
+    const [orderBy, setOrderBy] = React.useState(searchOptions[0].value);
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -193,7 +264,7 @@ export const DataTable = ({ headCells, rows, title }) => {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.name);
+            const newSelected = rows.map((n) => n[idField]);
             setSelected(newSelected);
             return;
         }
@@ -248,7 +319,7 @@ export const DataTable = ({ headCells, rows, title }) => {
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <DataTableTitle title={title} />
-                <DataTableSearch />
+                <DataTableSearch searchOptions={searchOptions} />
                 <DataTableSelect numSelected={selected.length} />
 
                 <TableContainer>
@@ -267,54 +338,7 @@ export const DataTable = ({ headCells, rows, title }) => {
                             headCells={headCells}
                         />
                         <TableBody>
-                            {visibleRows.map((row, index) => {
-                                const isItemSelected = isSelected(row.name);
-                                const labelId = `enhanced-table-checkbox-${index}`;
-
-                                return (
-                                    <TableRow
-                                        hover
-                                        onClick={(event) => handleClick(event, row.name)}
-                                        role="checkbox"
-                                        aria-checked={isItemSelected}
-                                        tabIndex={-1}
-                                        key={row.name}
-                                        selected={isItemSelected}
-                                        sx={{ cursor: 'pointer' }}
-                                    >
-                                        <TableCell padding="checkbox">
-                                            <Checkbox
-                                                color="primary"
-                                                checked={isItemSelected}
-                                                inputProps={{
-                                                    'aria-labelledby': labelId,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell
-                                            component="th"
-                                            id={labelId}
-                                            scope="row"
-                                            padding="none"
-                                        >
-                                            {row.name}
-                                        </TableCell>
-                                        <TableCell align="right">{row.calories}</TableCell>
-                                        <TableCell align="right">{row.fat}</TableCell>
-                                        <TableCell align="right">{row.carbs}</TableCell>
-                                        <TableCell align="right">{row.protein}</TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                            {emptyRows > 0 && (
-                                <TableRow
-                                    style={{
-                                        height: (53) * emptyRows,
-                                    }}
-                                >
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
+                            {renderRows(idField, visibleRows, emptyRows, isSelected, handleClick)}
                         </TableBody>
                     </Table>
                 </TableContainer>
