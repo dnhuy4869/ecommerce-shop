@@ -1,5 +1,5 @@
 import { DataTable } from "@components/data-table"
-import { Avatar, Box, Checkbox, TableCell, TableRow } from "@mui/material";
+import { Avatar, Box, Checkbox, IconButton, TableCell, TableRow } from "@mui/material";
 import { useMemo, useState } from "react"
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -114,11 +114,13 @@ export const CategoryList = () => {
                             </TableCell>
                             <TableCell align="right">
                                 <Box sx={{}}>
-                                    <Link to={`edit/${row.id}`}><ModeEditIcon color="primary" /></Link>
-                                    <DeleteIcon
-                                        onClick={() => setOpenDialog(true)}
-                                        sx={{ color: pink[500] }}
-                                    />
+                                    <IconButton color="primary" component={Link} to={`edit/${row.id}`}>
+                                        <ModeEditIcon />
+                                    </IconButton>
+                                    <IconButton onClick={() => setOpenDialog(true)}
+                                        sx={{ color: pink[500] }}>
+                                        <DeleteIcon />
+                                    </IconButton>
                                 </Box>
                             </TableCell>
                         </TableRow>

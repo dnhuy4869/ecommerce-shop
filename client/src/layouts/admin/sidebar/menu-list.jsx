@@ -32,10 +32,6 @@ export const MenuList = () => {
 
             navigate(`/admin/${menuList[0].path}`);
         }
-
-        return () => {
-            dispatch(setSelectedMenu(''));
-        }
     }, []);
 
     return (

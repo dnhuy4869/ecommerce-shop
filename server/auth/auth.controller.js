@@ -4,7 +4,7 @@ import userValidator from "../user/user.validator.js";
 import bcrypt from 'bcrypt';
 import authMethods from "./auth.methods.js";
 
-const ACCESS_TOKEN_LIFE = "30s";
+const ACCESS_TOKEN_LIFE = "10s";
 const REFRESH_TOKEN_LIFE = "1d";
 
 const login = async (req, res) => {
@@ -69,8 +69,7 @@ const login = async (req, res) => {
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            sameSite: "None",
-            secure: true,
+            secure: false,
             maxAge: 24 * 60 * 60 * 1000
         })
 
@@ -172,6 +171,8 @@ const refresh = async (req, res) => {
     
         const refreshToken = req.cookies.refreshToken;
         if (!refreshToken) {
+            //console.log("no refresh token");
+
             return res.status(HttpStatus.UNAUTHORIZED).json({
                 message: "Unauthorized",
             })

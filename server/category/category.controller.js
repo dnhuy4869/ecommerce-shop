@@ -46,25 +46,25 @@ const addCategory = async (req, res) => {
         const data = {
             name: req.body.name,
         }
-
+    
         // validate data
-
-        if (!categoryValidator.validateUsername(data.name)) {
+    
+        if (!categoryValidator.validateName(data.name)) {
             return res.status(HttpStatus.BAD_REQUEST).json({
                 message: "Tên loại hàng không hợp lệ",
             })
         }
-
+    
         const category = await CategoryModel.findOne({ name: data.name });
         if (category) {
             return res.status(HttpStatus.CONFLICT).json({
                 message: "Tên loại hàng đã tồn tại",
             })
         }
-
+    
         const newCategory = await new CategoryModel(data);
         const savedCategory = await newCategory.save();
-
+    
         return res.status(HttpStatus.OK).json({
             message: "Thêm thành công",
             insertedId: savedCategory._id,

@@ -125,7 +125,6 @@ const DataTableTitle = ({ title }) => {
             <Typography
                 sx={{ flex: '1 1 100%' }}
                 variant="h4"
-                id="tableTitle"
                 component="div"
             >
                 {title}

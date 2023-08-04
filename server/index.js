@@ -9,9 +9,9 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
+app.use(express.json());
 
 // Handle syntax error in request json data
 app.use((err, req, res, next) => {

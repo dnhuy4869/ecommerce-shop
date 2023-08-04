@@ -1,6 +1,6 @@
 import { Box, styled, useMediaQuery, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { setSidebarOpened } from "./admin-layout.slice";
+import { resetLayout, setSidebarOpened } from "./admin-layout.slice";
 import { DRAWER_WIDTH } from "./admin-layout.constants";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Header } from "./header";
@@ -65,6 +65,12 @@ export const AdminLayout = () => {
             navigate("/");
         }
     }, [user]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(resetLayout());
+        }
+    }, []);
 
     return (
         <>

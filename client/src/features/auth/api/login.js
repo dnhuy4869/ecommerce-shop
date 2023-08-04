@@ -1,9 +1,12 @@
-import { api } from "@lib/axios";
+import api from "@lib/axios";
 
 export const login = async (data) => {
     try {
         const res = await api.post(`/auth/login`,
-            data
+            data,
+            {
+                withCredentials: true,
+            }
         );
 
         return {
