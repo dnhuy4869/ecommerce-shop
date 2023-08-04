@@ -1,34 +1,48 @@
-import api from "@lib/axios";
+import { apiGet, apiPost, apiPut, apiDelete } from "@lib/axios";
 
 export const useCategoryCrud = () => {
 
-    const addCategory = async (user, data) => {
-        try {
-            const res = await api.post(`/category/add`,
-                data
-            );
-    
-            return {
-                isSuccess: true,
-                response: res.data
-            }
-        }
-        catch (err) {
-            if (err.response) {
-                return {
-                    isSuccess: false,
-                    response: err.response.data
-                }
-            }
-    
-            console.log(err);
-            
-            return {
-                isSuccess: false,
-                response: { message: "Unknown error when post request" }
-            }
-        }
+    const getAllCategories = async () => {
+        return await apiGet(`/category/get-all`);
     }
 
-    return { addCategory };
+    const getCategoryById = async (id) => {
+        return await apiGet(`/category/get-by-id/${id}`);
+    }
+
+    const addCategory = async (data) => {
+        return await apiPost(`/category/add`, data);
+    }
+
+    const editCategory = async (id, data) => {
+        return await apiPut(`/category/edit/${id}`, data);
+    }
+
+    const deleteCategory = async (id) => {
+        return await apiDelete(`/category/delete/${id}`);
+    }
+
+    const deleteMultipleCategories = async (data) => {
+        return await apiPost(`/category/delete-multiple`, data);
+    }
+
+    const uploadCategoryImage = async (id, image) => {
+        const formData = new FormData();
+        formData.append('image', image);
+        formData.append('id', id);
+
+        return await apiPost(`/category/upload-image`, formData, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
+    }
+
+    return {
+        getAllCategories, 
+        getCategoryById,
+        addCategory,
+        editCategory, 
+        deleteCategory,
+        deleteMultipleCategories,
+        uploadCategoryImage,
+    };
 }

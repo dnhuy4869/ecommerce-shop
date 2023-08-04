@@ -24,7 +24,7 @@ export const FormImageUpload = ({title, image, previewUrl, onImageChange}) => {
                         <CardMedia component="img" height="300" image={previewUrl} alt="preview" />
                         <CardContent>
                             <Typography variant="body2" color="text.secondary">
-                                {image.name}
+                                {image?.name}
                             </Typography>
                         </CardContent>
                     </Card>

@@ -1,8 +1,9 @@
 import axios from "axios";
 import { refreshToken } from "@features/auth";
+import { API_URL } from "../app/config";
 
 const api = axios.create({
-    baseURL: "http://127.0.0.1:8000",
+    baseURL: API_URL,
     withCredentials: true,
 });
 
@@ -50,7 +51,11 @@ api.interceptors.response.use((response) => {
 
             //console.log("refresh token");
             originalRequest._retry = true;
-            originalRequest.headers['authorization'] = resData.response.accessToken;
+
+            // Parse data to json again
+            if (originalRequest.headers['Content-Type'] === "application/json") {
+                originalRequest.data = JSON.parse(originalRequest.data);
+            }
 
             return api(originalRequest);
         } else {
@@ -65,3 +70,106 @@ api.interceptors.response.use((response) => {
 
 export default api;
 
+export const apiGet = async (path) => {
+    try {
+        const res = await api.get(path);
+
+        return {
+            isSuccess: true,
+            response: res.data
+        }
+    }
+    catch (err) {
+        if (err.response) {
+            return {
+                isSuccess: false,
+                response: err.response.data
+            }
+        }
+
+        console.log(err);
+
+        return {
+            isSuccess: false,
+            response: { message: "Unknown error when post request" }
+        }
+    }
+}
+
+export const apiPost = async (path, data, config = undefined) => {
+    try {
+        const res = await api.post(path, data, config);
+
+        return {
+            isSuccess: true,
+            response: res.data
+        }
+    }
+    catch (err) {
+        if (err.response) {
+            return {
+                isSuccess: false,
+                response: err.response.data
+            }
+        }
+
+        console.log(err);
+
+        return {
+            isSuccess: false,
+            response: { message: "Unknown error when post request" }
+        }
+    }
+}
+
+export const apiPut = async (path, data, config = undefined) => {
+    try {
+        const res = await api.put(path, data, config);
+
+        return {
+            isSuccess: true,
+            response: res.data
+        }
+    }
+    catch (err) {
+        if (err.response) {
+            return {
+                isSuccess: false,
+                response: err.response.data
+            }
+        }
+
+        console.log(err);
+
+        return {
+            isSuccess: false,
+            response: { message: "Unknown error when post request" }
+        }
+    }
+}
+
+export const apiDelete = async (path) => {
+    try {
+        const res = await api.delete(path);
+
+        return {
+            isSuccess: true,
+            response: res.data
+        }
+    }
+    catch (err) {
+        if (err.response) {
+            return {
+                isSuccess: false,
+                response: err.response.data
+            }
+        }
+
+        console.log(err);
+
+        return {
+            isSuccess: false,
+            response: { message: "Unknown error when post request" }
+        }
+    }
+}

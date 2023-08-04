@@ -1,14 +1,14 @@
-import { Box, Button, Card, CardContent, CardMedia, Divider, FormHelperText, IconButton, OutlinedInput, Stack, TextField, Toolbar, Typography, useTheme } from "@mui/material"
+import { Box, Button, Divider, FormHelperText, Stack, Toolbar, Typography, useTheme } from "@mui/material"
 import { useFormik } from "formik";
 import { useState } from "react";
 import * as Yup from 'yup';
 import { CategorySchema } from "../category.constants";
 import { FormInput } from "@components/form-input";
-import { FileUploadOutlined } from "@mui/icons-material";
 import { useImageUpload } from "@hooks/use-image-upload";
 import { FormImageUpload } from "@components/form-image-upload";
 import { useCategoryCrud } from "../api/use-category-crud";
-import { useAuth } from "@features/auth/api/use-auth";
+import { useSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 export const CategoryAdd = () => {
 
@@ -22,8 +22,26 @@ export const CategoryAdd = () => {
 
     const { image, previewUrl, handleImageChange } = useImageUpload();
 
-    const { addCategory } = useCategoryCrud();
-    const { user } = useAuth();
+    const { addCategory, uploadCategoryImage } = useCategoryCrud();
+
+    const { enqueueSnackbar } = useSnackbar();
+    const navigate = useNavigate();
+
+    const uploadImage = async (id) => {
+
+        if (!image) {
+            return false;
+        }
+
+        const resData = await uploadCategoryImage(id, image);
+
+        if (!resData.isSuccess) {
+            enqueueSnackbar(resData.response.message, { variant: 'error' });
+            return false;
+        }
+
+        return true;
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -45,7 +63,7 @@ export const CategoryAdd = () => {
                 name: values.name,
             }
 
-            const resData = await addCategory(user, data);
+            const resData = await addCategory(data);
             if (!resData.isSuccess) {
                 setStatus(prevState => ({
                     isError: true,
@@ -56,11 +74,17 @@ export const CategoryAdd = () => {
                 return;
             }
 
+            await uploadImage(resData.response.insertedId);
+
             setStatus(prevState => ({
                 isError: false,
                 errorMessage: resData.response.message,
                 isSubmit: false,
             }));
+
+            enqueueSnackbar(resData.response.message, { variant: 'success' });
+
+            navigate("/admin/categories");
         }
     })
 
@@ -117,7 +141,10 @@ export const CategoryAdd = () => {
                                 {
                                     status.errorMessage 
                                     ? (
-                                        <FormHelperText error sx={{ fontSize: '0.8rem' }}>{status.errorMessage}</FormHelperText>
+                                        <FormHelperText error={status.isError} sx={{ 
+                                            fontSize: '0.85rem' ,
+                                            color: "green"
+                                        }}>{status.errorMessage}</FormHelperText>
                                     )
                                     : (
                                         <div></div>

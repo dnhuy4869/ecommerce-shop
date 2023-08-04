@@ -7,25 +7,28 @@ import { pink } from "@mui/material/colors";
 import { Link } from "react-router-dom";
 import { ConfirmDialog } from "@components/confirm-dialog";
 import { useSnackbar } from "notistack";
+import { useCategoryList } from "../api/use-category-list";
+import { useCategoryCrud } from "../api/use-category-crud";
+import { API_URL } from "../../../app/config";
 
 export const CategoryList = () => {
 
     const headCells = useMemo(() => [
         {
             id: 'name',
-            numeric: false,
+            align: "left",
             disableSort: false,
             label: 'Tên loại hàng',
         },
         {
             id: 'imageUrl',
-            numeric: false,
+            align: "left",
             disableSort: true,
             label: 'Hình ảnh',
         },
         {
             id: 'actions',
-            numeric: true,
+            align: "right",
             disableSort: true,
             label: 'Thao tác',
         },
@@ -42,36 +45,63 @@ export const CategoryList = () => {
         },
     ], []);
 
-    const allCategories = [
-        {
-            name: 'Cupcake',
-            imageUrl: "https://tanthanhpc.vn/wp-content/uploads/2022/10/PC-Workstation-T22-Core-i7-12700K.jpg",
-        },
-        {
-            name: 'Cupcake2',
-            imageUrl: "https://tanthanhpc.vn/wp-content/uploads/2022/10/PC-Workstation-T22-Core-i7-12700K.jpg",
-        },
-        {
-            name: 'Cupcake4',
-            imageUrl: "https://tanthanhpc.vn/wp-content/uploads/2022/10/PC-Workstation-T22-Core-i7-12700K.jpg",
-        },
-        {
-            name: 'Cupcake6',
-            imageUrl: "https://tanthanhpc.vn/wp-content/uploads/2022/10/PC-Workstation-T22-Core-i7-12700K.jpg",
-        },
-    ];
+    const { 
+        originalList, categoryList, 
+        setCategoryList, deleteIdInList,
+        deleteIdsInList,
+    } = useCategoryList();
 
-    //const rows = useMemo(() => allCategories, [allCategories]);
+    const { deleteCategory, deleteMultipleCategories } = useCategoryCrud();
 
-    const [openDialog, setOpenDialog] = useState(false);
+    const [ deleteDialog, setDeleteDialog] = useState({
+        isOpen: false,
+        id: "",
+    });
+
     const { enqueueSnackbar } = useSnackbar();
 
-    const handleDialogClose = () => {
-        setOpenDialog(false);
+    const closeDeleteDialog = () => {
+        setDeleteDialog(prevState => ({
+            ...prevState,
+            isOpen: false,
+        }));
     }
 
-    const handleDialogConfirm = () => {
-        setOpenDialog(false);
+    const handleDeleteDialogClose = () => {
+        closeDeleteDialog();
+    }
+
+    const handleDialogConfirm = async () => {
+
+        const resData = await deleteCategory(deleteDialog.id);
+        if (!resData.isSuccess) {
+            closeDeleteDialog();
+            enqueueSnackbar(resData.response.message, { variant: 'error' });
+
+            return;
+        }
+
+        deleteIdInList(deleteDialog.id)
+
+        closeDeleteDialog();
+        enqueueSnackbar("Xóa thành công", { variant: 'success' });
+    }
+
+    const handleDeleteMultiple = async (ids) => {
+
+        const resData = await deleteMultipleCategories({
+            ids: ids,
+        });
+        if (!resData.isSuccess) {
+            closeDeleteDialog();
+            enqueueSnackbar(resData.response.message, { variant: 'error' });
+
+            return;
+        }
+
+        deleteIdsInList(ids);
+
+        closeDeleteDialog();
         enqueueSnackbar("Xóa thành công", { variant: 'success' });
     }
 
@@ -110,14 +140,17 @@ export const CategoryList = () => {
                                 {row.name}
                             </TableCell>
                             <TableCell align="left">
-                                <Avatar alt="image" src={row.imageUrl} />
+                                <Avatar alt="image" src={`${API_URL}${row.imageUrl}`} />
                             </TableCell>
                             <TableCell align="right">
                                 <Box sx={{}}>
                                     <IconButton color="primary" component={Link} to={`edit/${row.id}`}>
                                         <ModeEditIcon />
                                     </IconButton>
-                                    <IconButton onClick={() => setOpenDialog(true)}
+                                    <IconButton onClick={() => setDeleteDialog({
+                                        isOpen: true,
+                                        id: row.id,
+                                    })}
                                         sx={{ color: pink[500] }}>
                                         <DeleteIcon />
                                     </IconButton>
@@ -142,18 +175,21 @@ export const CategoryList = () => {
     return (
         <>
             <DataTable
-                idField="name"
+                idField="id"
                 title="Loại hàng"
                 headCells={headCells}
-                rows={allCategories}
+                rows={categoryList}
+                originalRows={originalList}
                 searchOptions={searchOptions}
                 renderRows={renderRows}
+                setRowData={setCategoryList}
+                onDeleteMultiple={handleDeleteMultiple}
             />
             <ConfirmDialog
                 title="Xóa loại hàng"
                 content="Bạn có chắc muốn là muốn xóa loại hàng này ?"
-                open={openDialog}
-                handleClose={handleDialogClose}
+                open={deleteDialog.isOpen}
+                handleClose={handleDeleteDialogClose}
                 onConfirm={handleDialogConfirm}
             />
         </>

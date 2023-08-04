@@ -16,15 +16,13 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import AddIcon from '@mui/icons-material/Add';
-import { Button, FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, TextField } from '@mui/material';
+import { Button, FormControl, InputAdornment, MenuItem, OutlinedInput, Select } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from 'react-router-dom';
+import { ConfirmDialog } from "./confirm-dialog"
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -82,7 +80,7 @@ function DataTableHead(props) {
                 {headCells.map((headCell, index) => (
                     <TableCell
                         key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
+                        align={headCell.align}
                         padding={index === 0 ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
@@ -146,7 +144,7 @@ const DataTableTitle = ({ title }) => {
     );
 }
 
-const DataTableSearch = ({ searchOptions }) => {
+const DataTableSearch = ({ searchOptions, setSearchData, originalData }) => {
     const [keyword, setKeyword] = React.useState('');
     const [option, setOption] = React.useState('');
 
@@ -157,6 +155,15 @@ const DataTableSearch = ({ searchOptions }) => {
     }, []);
 
     const theme = useTheme();
+
+    const handleSearchInput = (e) => {
+
+        const key = e.target.value;
+        setKeyword(key);
+
+        const searchData = originalData.filter(item => item[option].includes(key));
+        setSearchData(searchData);
+    }
 
     return (
         <>
@@ -178,7 +185,7 @@ const DataTableSearch = ({ searchOptions }) => {
                 <OutlinedInput
                     type="text"
                     value={keyword}
-                    onChange={e => setKeyword(e.target.value)}
+                    onChange={handleSearchInput}
                     sx={{
                         minWidth: '50%',
                         background: "#fff",
@@ -208,11 +215,11 @@ const DataTableSearch = ({ searchOptions }) => {
                     <Select
                         value={option}
                         onChange={e => setOption(e.target.value)}
-                        sx={{ 
+                        sx={{
                             minWidth: 180,
                             [theme.breakpoints.down('lg')]: {
                                 minWidth: "90%",
-                            }, 
+                            },
                         }}
                     >
                         {
@@ -229,11 +236,19 @@ const DataTableSearch = ({ searchOptions }) => {
     )
 }
 
-const DataTableSelect = ({ numSelected }) => {
+const DataTableSelect = ({ selected, setSelected, onDeleteMultiple }) => {
+
+    const [ openDialog, setOpenDialog] = React.useState(false);
+
+    const handleDelete = () => {
+        onDeleteMultiple(selected);
+        setSelected([]);
+    }
+
     return (
         <>
             {
-                numSelected > 0 && (
+                selected.length > 0 && (
                     <Toolbar
                         sx={{
                             px: 2,
@@ -247,23 +262,31 @@ const DataTableSelect = ({ numSelected }) => {
                             variant="subtitle1"
                             component="div"
                         >
-                            Đã chọn {numSelected}
+                            Đã chọn {selected.length}
                         </Typography>
 
                         <Tooltip title="Delete">
-                            <IconButton>
+                            <IconButton onClick={() => setOpenDialog(true)}>
                                 <DeleteIcon />
                             </IconButton>
                         </Tooltip>
                     </Toolbar>
                 )
             }
+
+            <ConfirmDialog
+                title="Xóa tất cả lựa chọn"
+                content="Bạn có chắc muốn là muốn tất cả lựa chọn không ?"
+                open={openDialog}
+                handleClose={() => setOpenDialog(false)}
+                onConfirm={handleDelete}
+            />
         </>
     )
 }
 
 export const DataTable = ({
-    idField, headCells, rows, title, searchOptions, renderRows
+    idField, headCells, rows, title, searchOptions, renderRows, originalRows, setRowData, onDeleteMultiple
 }) => {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState(searchOptions[0].value);
@@ -327,48 +350,50 @@ export const DataTable = ({
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage,
             ),
-        [order, orderBy, page, rowsPerPage],
+        [order, orderBy, page, rowsPerPage, rows],
     );
 
     return (
-        <Box sx={{ width: '100%' }}>
-            <Paper sx={{ width: '100%', mb: 2 }}>
-                <DataTableTitle title={title} />
-                <DataTableSearch searchOptions={searchOptions} />
-                <DataTableSelect numSelected={selected.length} />
+        <>
+            <Box sx={{ width: '100%' }}>
+                <Paper sx={{ width: '100%', mb: 2 }}>
+                    <DataTableTitle title={title} />
+                    <DataTableSearch searchOptions={searchOptions} setSearchData={setRowData} originalData={originalRows} />
+                    <DataTableSelect selected={selected} setSelected={setSelected} onDeleteMultiple={onDeleteMultiple} />
 
-                <TableContainer>
-                    <Table
-                        sx={{ minWidth: 750 }}
-                        aria-labelledby="tableTitle"
-                        size='medium'
-                    >
-                        <DataTableHead
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
-                            headCells={headCells}
-                        />
-                        <TableBody>
-                            {renderRows(idField, visibleRows, emptyRows, isSelected, handleClick)}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                    labelRowsPerPage="Số hàng mỗi trang:"
-                    labelDisplayedRows={({ from, to, count }) => `${from}-${to} của ${count}`}
-                />
-            </Paper>
-        </Box>
+                    <TableContainer>
+                        <Table
+                            sx={{ minWidth: 750 }}
+                            aria-labelledby="tableTitle"
+                            size='medium'
+                        >
+                            <DataTableHead
+                                numSelected={selected.length}
+                                order={order}
+                                orderBy={orderBy}
+                                onSelectAllClick={handleSelectAllClick}
+                                onRequestSort={handleRequestSort}
+                                rowCount={rows.length}
+                                headCells={headCells}
+                            />
+                            <TableBody>
+                                {renderRows(idField, visibleRows, emptyRows, isSelected, handleClick)}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[5, 10, 25]}
+                        component="div"
+                        count={rows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={!rows.length || rows.length <= 0 ? 0 : page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        labelRowsPerPage="Số hàng mỗi trang:"
+                        labelDisplayedRows={({ from, to, count }) => `${from}-${to} của ${count}`}
+                    />
+                </Paper>
+            </Box>
+        </>
     );
 }

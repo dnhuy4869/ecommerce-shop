@@ -13,5 +13,9 @@ export const useImageUpload = () => {
         }
     };
 
-    return { image, previewUrl, handleImageChange };
+    const setImageFromUrl = (imageUrl) => {
+        setPreviewUrl(imageUrl);
+    };
+
+    return { image, previewUrl, setImageFromUrl, handleImageChange };
 }

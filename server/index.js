@@ -4,14 +4,19 @@ import dotenv from 'dotenv';
 import initRoutes from "./app/routes.js";
 import initDatabase from "./app/database.js";
 import cookieParser from 'cookie-parser';
+import fileUpload from 'express-fileupload';
+import { __dirname } from './app/dirname.js';
 
 dotenv.config();
 
 const app = express();
 
+app.use(express.static('public'));
+
 app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
 app.use(express.json());
+app.use(fileUpload({ createParentPath: true }));
 
 // Handle syntax error in request json data
 app.use((err, req, res, next) => {
