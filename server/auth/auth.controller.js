@@ -68,9 +68,7 @@ const login = async (req, res) => {
         }
 
         res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: false,
-            maxAge: 24 * 60 * 60 * 1000
+            httpOnly: false,
         })
 
         return res.status(HttpStatus.OK).json({
@@ -171,7 +169,7 @@ const refresh = async (req, res) => {
     
         const refreshToken = req.cookies.refreshToken;
         if (!refreshToken) {
-            //console.log("no refresh token");
+            console.log("no refresh token");
 
             return res.status(HttpStatus.UNAUTHORIZED).json({
                 message: "Unauthorized",

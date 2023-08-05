@@ -4,18 +4,18 @@ import authMiddleware from "../auth/auth.middleware.js";
 
 const router = Router();
 
-router.get("/get-all", authMiddleware.verifyCustomer, categoryController.getAllCategories);
+router.get("/get-all", authMiddleware.verifyAdmin, categoryController.getAllCategories);
 
-router.get("/get-by-id/:id", authMiddleware.verifyCustomer, categoryController.getCategoryById);
+router.get("/get-by-id/:id", authMiddleware.verifyAdmin, categoryController.getCategoryById);
 
-router.post("/add", authMiddleware.verifyCustomer, categoryController.addCategory);
+router.post("/add", authMiddleware.verifyAdmin, categoryController.addCategory);
 
-router.put("/edit/:id", authMiddleware.verifyCustomer, categoryController.editCategory);
+router.put("/edit/:id", authMiddleware.verifyAdmin, categoryController.editCategory);
 
-router.delete("/delete/:id", authMiddleware.verifyCustomer, categoryController.deleteCategory);
+router.delete("/delete/:id", authMiddleware.verifyAdmin, categoryController.deleteCategory);
 
-router.post("/delete-multiple", authMiddleware.verifyCustomer, categoryController.deleteMultipleCategories);
+router.post("/delete-multiple", authMiddleware.verifyAdmin, categoryController.deleteMultipleCategories);
 
-router.post("/upload-image", authMiddleware.verifyCustomer, categoryController.uploadImage);
+router.post("/upload-image", authMiddleware.verifyAdmin, categoryController.uploadImage);
 
 export default router;

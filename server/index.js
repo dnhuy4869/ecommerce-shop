@@ -13,7 +13,13 @@ const app = express();
 
 app.use(express.static('public'));
 
-app.use(cors({ credentials: true, origin: true }));
+app.use(cors({
+    credentials: true, origin: [
+        "http://localhost:3000",
+        "http://localhost:8000",
+    ]
+}));
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(fileUpload({ createParentPath: true }));

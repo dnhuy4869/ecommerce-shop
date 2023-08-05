@@ -42,7 +42,7 @@ const verifyAdmin = (req, res, next) => {
 
 const verifyCustomer = (req, res, next) => {
     verifyToken(req, res, () => {
-        if (req.tokenData.role === "admin" || req.tokenData.role === "seller") {
+        if (req.tokenData.role === "admin" || req.tokenData.role === "customer") {
             next();
         }
         else {

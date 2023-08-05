@@ -1,14 +1,13 @@
 import HttpStatus from "../constants/http-status.js"
-import CategoryModel from "./category.model.js";
-import categoryValidator from "./category.validator.js";
-import categoryMethods from "./category.methods.js";
-import ProductModel from "../product/product.model.js";
+import ProductModel from "./product.model.js";
+import productValidator from "./product.validator.js";
+import productMethods from "./product.methods.js";
 
-const getAllCategories = async (req, res) => {
+const getAllProducts = async (req, res) => {
     try {
-        const categories = await CategoryModel.find();
+        const products = await ProductModel.find();
 
-        return res.status(HttpStatus.OK).json(categories);
+        return res.status(HttpStatus.OK).json(products);
     }
     catch (err) {
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -18,7 +17,7 @@ const getAllCategories = async (req, res) => {
     }
 }
 
-const getCategoryById = async (req, res) => {
+const getProductById = async (req, res) => {
     try {
         if (!req.params.id) {
             return res.status(HttpStatus.BAD_REQUEST).json({
@@ -26,14 +25,14 @@ const getCategoryById = async (req, res) => {
             })
         }
 
-        const category = await CategoryModel.findById(req.params.id);
-        if (!category) {
+        const product = await ProductModel.findById(req.params.id);
+        if (!product) {
             return res.status(HttpStatus.NOT_FOUND).json({
                 message: "Id không tồn tại",
             })
         }
 
-        return res.status(HttpStatus.OK).json(category);
+        return res.status(HttpStatus.OK).json(product);
     }
     catch (err) {
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -45,10 +44,31 @@ const getCategoryById = async (req, res) => {
 
 const validateData = (data) => {
 
-    if (!categoryValidator.validateName(data.name)) {
+    if (!productValidator.validateName(data.name)) {
         return {
             isValid: false,
-            message: "Tên loại hàng không hợp lệ",
+            message: "Tên sản phẩm không hợp lệ",
+        }
+    }
+
+    if (!productValidator.validatePrice(data.price)) {
+        return {
+            isValid: false,
+            message: "Giá sản phẩm không hợp lệ",
+        }
+    }
+
+    if (!productValidator.validateDescription(data.description)) {
+        return {
+            isValid: false,
+            message: "Mô tả sản phẩm không hợp lệ",
+        }
+    }
+
+    if (!productValidator.validateIdCategory(data.idCategory)) {
+        return {
+            isValid: false,
+            message: "Id loại hàng không hợp lệ",
         }
     }
 
@@ -58,10 +78,13 @@ const validateData = (data) => {
     };
 }
 
-const addCategory = async (req, res) => {
+const addProduct = async (req, res) => {
     try {
         const data = {
             name: req.body.name,
+            price: req.body.price,
+            description: req.body.description,
+            idCategory: req.body.idCategory,
         }
 
         // validate data
@@ -72,19 +95,19 @@ const addCategory = async (req, res) => {
             })
         }
 
-        const category = await CategoryModel.findOne({ name: data.name });
-        if (category) {
+        const product = await ProductModel.findOne({ name: data.name });
+        if (product) {
             return res.status(HttpStatus.CONFLICT).json({
-                message: "Tên loại hàng đã tồn tại",
+                message: "Tên sản phẩm đã tồn tại",
             })
         }
 
-        const newCategory = await new CategoryModel(data);
-        const savedCategory = await newCategory.save();
+        const newProduct = await new ProductModel(data);
+        const savedProduct = await newProduct.save();
 
         return res.status(HttpStatus.OK).json({
             message: "Thêm thành công",
-            insertedId: savedCategory._id,
+            insertedId: savedProduct._id,
         });
     }
     catch (err) {
@@ -95,7 +118,7 @@ const addCategory = async (req, res) => {
     }
 }
 
-const editCategory = async (req, res) => {
+const editProduct = async (req, res) => {
     try {
         if (!req.params.id) {
             return res.status(HttpStatus.BAD_REQUEST).json({
@@ -103,8 +126,8 @@ const editCategory = async (req, res) => {
             })
         }
 
-        const category = await CategoryModel.findById(req.params.id);
-        if (!category) {
+        const product = await ProductModel.findById(req.params.id);
+        if (!product) {
             return res.status(HttpStatus.NOT_FOUND).json({
                 message: "Id không tồn tại",
             })
@@ -112,6 +135,9 @@ const editCategory = async (req, res) => {
 
         const data = {
             name: req.body.name,
+            price: req.body.price,
+            description: req.body.description,
+            idCategory: req.body.idCategory,
         }
 
         // validate data
@@ -122,16 +148,16 @@ const editCategory = async (req, res) => {
             })
         }
 
-        if (data.name !== category.name) {
-            const concurrent = await CategoryModel.findOne({ name: data.name });
+        if (data.name !== product.name) {
+            const concurrent = await ProductModel.findOne({ name: data.name });
             if (concurrent) {
                 return res.status(HttpStatus.CONFLICT).json({
-                    message: "Tên loại hàng đã tồn tại",
+                    message: "Tên sản phẩm đã tồn tại",
                 })
             }
         }
 
-        await category.updateOne(data);
+        await product.updateOne(data);
 
         return res.status(HttpStatus.OK).json({
             message: "Cập nhật thành công",
@@ -145,7 +171,7 @@ const editCategory = async (req, res) => {
     }
 }
 
-const deleteCategory = async (req, res) => {
+const deleteProduct = async (req, res) => {
     try {
         if (!req.params.id) {
             return res.status(HttpStatus.BAD_REQUEST).json({
@@ -153,19 +179,16 @@ const deleteCategory = async (req, res) => {
             })
         }
 
-        const category = await CategoryModel.findById(req.params.id);
-        if (!category) {
+        const product = await ProductModel.findById(req.params.id);
+        if (!product) {
             return res.status(HttpStatus.NOT_FOUND).json({
                 message: "Id không tồn tại",
             })
         }
 
-        categoryMethods.deleteImage(category);
+        productMethods.deleteImage(product);
 
-        await category.deleteOne();
-
-         // On delete cascade
-        await ProductModel.deleteMany({ idCategory: category._id });
+        await product.deleteOne();
 
         return res.status(HttpStatus.OK).json({
             message: "Xóa thành công",
@@ -179,7 +202,7 @@ const deleteCategory = async (req, res) => {
     }
 }
 
-const deleteMultipleCategories = async (req, res) => {
+const deleteMultipleProducts = async (req, res) => {
     try {
         if (!req.body.ids) {
             return res.status(HttpStatus.BAD_REQUEST).json({
@@ -187,27 +210,18 @@ const deleteMultipleCategories = async (req, res) => {
             })
         }
 
-        // Query the database for the categories that match the provided ids
-        const categories = await CategoryModel.find({
+        const products = await ProductModel.find({
             _id: {
                 $in: req.body.ids
             }
         });
 
-        // Delete the image files associated with each category
-        categories.forEach(category => {
-            categoryMethods.deleteImage(category);
+        products.forEach(category => {
+            productMethods.deleteImage(category);
         });
 
-        await CategoryModel.deleteMany({
-            _id: {
-                $in: req.body.ids
-            }
-        });
-
-        // On delete cascade
         await ProductModel.deleteMany({
-            idCategory: {
+            _id: {
                 $in: req.body.ids
             }
         });
@@ -232,8 +246,8 @@ const uploadImage = async (req, res) => {
             })
         }
 
-        const category = await CategoryModel.findById(req.body.id);
-        if (!category) {
+        const product = await ProductModel.findById(req.body.id);
+        if (!product) {
             return res.status(HttpStatus.NOT_FOUND).json({
                 message: "Id không tồn tại",
             })
@@ -252,18 +266,18 @@ const uploadImage = async (req, res) => {
             })
         }
 
-        const fileName = `/upload/categories/${category._id}/${image.md5}/${image.name}`;
-        if (fileName === category.imageUrl) {
+        const fileName = `/upload/products/${product._id}/${image.md5}/${image.name}`;
+        if (fileName === product.imageUrl) {
             return res.status(HttpStatus.OK).json({
                 message: "File đã tồn tại",
             });
         }
 
-        categoryMethods.deleteImage(category);
+        productMethods.deleteImage(product);
 
         image.mv(`./public${fileName}`);
 
-        await category.updateOne({ imageUrl: fileName });
+        await product.updateOne({ imageUrl: fileName });
 
         return res.status(HttpStatus.OK).json({
             message: "Upload thành công",
@@ -278,11 +292,11 @@ const uploadImage = async (req, res) => {
 }
 
 export default {
-    getAllCategories,
-    getCategoryById,
-    addCategory,
-    editCategory,
-    deleteCategory,
-    deleteMultipleCategories,
+    getAllProducts,
+    getProductById,
+    addProduct,
+    editProduct,
+    deleteProduct,
+    deleteMultipleProducts,
     uploadImage,
 }

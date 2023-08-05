@@ -27,7 +27,7 @@ function isStringLengthInRange(str, minLength = null, maxLength = null) {
 }
 
 const isValidStringData = (value, minLength = null, maxLength = null) => {
-    
+
     if (!value) {
         return false;
     }
@@ -49,4 +49,42 @@ const isValidStringData = (value, minLength = null, maxLength = null) => {
     return true;
 }
 
-export { isNullOrUndefined, isEmptyString, isValidEmail, isValidStringData };
+function isNumberInRange(value, min = null, max = null) {
+
+    if (min && max === null) {
+        return value >= min;
+    }
+
+    if (max && min === null) {
+        return value <= max;
+    }
+
+    return value >= min && value <= max;
+}
+
+const isValidNumberData = (value, min = null, max = null) => {
+
+    if (!value) {
+        return false;
+    }
+
+    if (isNullOrUndefined(value)) {
+        return false;
+    }
+
+    if (min || max) {
+        if (!isNumberInRange(value, min, max)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+export {
+    isNullOrUndefined,
+    isEmptyString,
+    isValidEmail,
+    isValidStringData,
+    isValidNumberData,
+};
