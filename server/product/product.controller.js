@@ -86,7 +86,7 @@ const addProduct = async (req, res) => {
             description: req.body.description,
             idCategory: req.body.idCategory,
         }
-
+    
         // validate data
         const validateRes = validateData(data);
         if (!validateRes.isValid) {
@@ -94,17 +94,10 @@ const addProduct = async (req, res) => {
                 message: validateRes.message,
             })
         }
-
-        const product = await ProductModel.findOne({ name: data.name });
-        if (product) {
-            return res.status(HttpStatus.CONFLICT).json({
-                message: "Tên sản phẩm đã tồn tại",
-            })
-        }
-
+    
         const newProduct = await new ProductModel(data);
         const savedProduct = await newProduct.save();
-
+    
         return res.status(HttpStatus.OK).json({
             message: "Thêm thành công",
             insertedId: savedProduct._id,
@@ -146,15 +139,6 @@ const editProduct = async (req, res) => {
             return res.status(HttpStatus.BAD_REQUEST).json({
                 message: validateRes.message,
             })
-        }
-
-        if (data.name !== product.name) {
-            const concurrent = await ProductModel.findOne({ name: data.name });
-            if (concurrent) {
-                return res.status(HttpStatus.CONFLICT).json({
-                    message: "Tên sản phẩm đã tồn tại",
-                })
-            }
         }
 
         await product.updateOne(data);

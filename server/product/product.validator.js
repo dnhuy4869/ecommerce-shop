@@ -50,13 +50,13 @@ const validateDescription = (data) => {
 }
 
 const validateIdCategory = (data) => {
-    const idCateogryOptions = ProductModel.schema.paths.idCateogry.options;
+    const idCategoryOptions = ProductModel.schema.paths.idCategory.options;
 
-    if (idCateogryOptions.required && idCateogryOptions.required === true) {
+    if (idCategoryOptions.required && idCategoryOptions.required === true) {
         if (!isValidStringData(
             data,
-            idCateogryOptions.minLength ? idCateogryOptions.minLength : null,
-            idCateogryOptions.maxLength ? idCateogryOptions.maxLength : null)) {
+            idCategoryOptions.minLength ? idCategoryOptions.minLength : null,
+            idCategoryOptions.maxLength ? idCategoryOptions.maxLength : null)) {
 
             return false;
         }
