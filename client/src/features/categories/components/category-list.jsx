@@ -84,7 +84,7 @@ export const CategoryList = () => {
         deleteIdInList(deleteDialog.id)
 
         closeDeleteDialog();
-        enqueueSnackbar("Xóa thành công", { variant: 'success' });
+        enqueueSnackbar(resData.response.message, { variant: 'success' });
     }
 
     const handleDeleteMultiple = async (ids) => {
@@ -102,7 +102,7 @@ export const CategoryList = () => {
         deleteIdsInList(ids);
 
         closeDeleteDialog();
-        enqueueSnackbar("Xóa thành công", { variant: 'success' });
+        enqueueSnackbar(resData.response.message, { variant: 'success' });
     }
 
     const renderRows = (idField, visibleRows, emptyRows, isSelected, handleSelect) => {

@@ -77,7 +77,6 @@ export const LoginForm = ({ onSuccess }) => {
                     readOnly={readOnly}
                     setReadOnly={setReadOnly}
                     type='text'
-                    id="username-register"
                     name="username"
                     label="Tên đăng nhập"
                     isError={Boolean(formik.touched.username && formik.errors.username)}
@@ -90,7 +89,6 @@ export const LoginForm = ({ onSuccess }) => {
                     readOnly={readOnly}
                     setReadOnly={setReadOnly}
                     type='password'
-                    id="password-register"
                     name="password"
                     label="Mật khẩu"
                     isError={Boolean(formik.touched.password && formik.errors.password)}

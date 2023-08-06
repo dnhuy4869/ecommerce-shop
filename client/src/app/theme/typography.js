@@ -82,6 +82,19 @@ const themeTypography = (theme) => {
                 top: 0
             }
         },
+        selectInput: {
+            marginTop: 1,
+            marginBottom: 1,
+            '& > label': {
+                color: theme.grey500,
+                '&[data-shrink="false"]': {
+                    top: 5
+                }
+            },
+            '& > div > div': {
+                paddingY: "21px",
+            }
+        },
         mainContent: {
             backgroundColor: theme.background,
             width: '100%',

@@ -88,7 +88,6 @@ export const RegisterForm = ({ onSuccess }) => {
                     readOnly={readOnly}
                     setReadOnly={setReadOnly}
                     type='text'
-                    id="fullName-register"
                     name="fullName"
                     label="Họ tên"
                     isError={Boolean(formik.touched.fullName && formik.errors.fullName)}
@@ -101,7 +100,6 @@ export const RegisterForm = ({ onSuccess }) => {
                     readOnly={readOnly}
                     setReadOnly={setReadOnly}
                     type='text'
-                    id="email-register"
                     name="email"
                     label="Email"
                     isError={Boolean(formik.touched.email && formik.errors.email)}
@@ -114,7 +112,6 @@ export const RegisterForm = ({ onSuccess }) => {
                     readOnly={readOnly}
                     setReadOnly={setReadOnly}
                     type='text'
-                    id="username-register"
                     name="username"
                     label="Tên đăng nhập"
                     isError={Boolean(formik.touched.username && formik.errors.username)}
@@ -127,7 +124,6 @@ export const RegisterForm = ({ onSuccess }) => {
                     readOnly={readOnly}
                     setReadOnly={setReadOnly}
                     type='password'
-                    id="password-register"
                     name="password"
                     label="Mật khẩu"
                     isError={Boolean(formik.touched.password && formik.errors.password)}
@@ -140,7 +136,6 @@ export const RegisterForm = ({ onSuccess }) => {
                     readOnly={readOnly}
                     setReadOnly={setReadOnly}
                     type='password'
-                    id="confirmPassword-register"
                     name="confirmPassword"
                     label="Nhập lại mật khẩu"
                     isError={Boolean(formik.touched.confirmPassword && formik.errors.confirmPassword)}

@@ -122,7 +122,6 @@ export const CategoryAdd = () => {
                                 readOnly={readOnly}
                                 setReadOnly={setReadOnly}
                                 type='text'
-                                id="name-add"
                                 name="name"
                                 label="Tên loại hàng"
                                 isError={Boolean(formik.touched.name && formik.errors.name)}

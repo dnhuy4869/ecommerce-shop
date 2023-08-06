@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import { ConfirmDialog } from "@components/confirm-dialog";
 import { useSnackbar } from "notistack";
 import { API_URL } from "../../../app/config";
+import { useProductList } from "../api/use-product-list";
+import { useProductCrud } from "../api/use-product-crud";
 
 export const ProductList = () => {
 
@@ -53,153 +55,156 @@ export const ProductList = () => {
         },
     ], []);
 
-    // const { 
-    //     originalList, categoryList, 
-    //     setCategoryList, deleteIdInList,
-    //     deleteIdsInList,
-    // } = useCategoryList();
+    const { 
+        originalList, productList, 
+        setProductList, deleteIdInList,
+        deleteIdsInList,
+    } = useProductList();
 
-    // const { deleteCategory, deleteMultipleCategories } = useCategoryCrud();
+    const { deleteProduct, deleteMultipleProducts } = useProductCrud();
 
-    // const [ deleteDialog, setDeleteDialog] = useState({
-    //     isOpen: false,
-    //     id: "",
-    // });
+    const [ deleteDialog, setDeleteDialog] = useState({
+        isOpen: false,
+        id: "",
+    });
 
-    // const { enqueueSnackbar } = useSnackbar();
+    const { enqueueSnackbar } = useSnackbar();
 
-    // const closeDeleteDialog = () => {
-    //     setDeleteDialog(prevState => ({
-    //         ...prevState,
-    //         isOpen: false,
-    //     }));
-    // }
+    const closeDeleteDialog = () => {
+        setDeleteDialog(prevState => ({
+            ...prevState,
+            isOpen: false,
+        }));
+    }
 
-    // const handleDeleteDialogClose = () => {
-    //     closeDeleteDialog();
-    // }
+    const handleDeleteDialogClose = () => {
+        closeDeleteDialog();
+    }
 
-    // const handleDialogConfirm = async () => {
+    const handleDialogConfirm = async () => {
 
-    //     const resData = await deleteCategory(deleteDialog.id);
-    //     if (!resData.isSuccess) {
-    //         closeDeleteDialog();
-    //         enqueueSnackbar(resData.response.message, { variant: 'error' });
+        const resData = await deleteProduct(deleteDialog.id);
+        if (!resData.isSuccess) {
+            closeDeleteDialog();
+            enqueueSnackbar(resData.response.message, { variant: 'error' });
 
-    //         return;
-    //     }
+            return;
+        }
 
-    //     deleteIdInList(deleteDialog.id)
+        deleteIdInList(deleteDialog.id)
 
-    //     closeDeleteDialog();
-    //     enqueueSnackbar("Xóa thành công", { variant: 'success' });
-    // }
+        closeDeleteDialog();
+        enqueueSnackbar(resData.response.message, { variant: 'success' });
+    }
 
-    // const handleDeleteMultiple = async (ids) => {
+    const handleDeleteMultiple = async (ids) => {
 
-    //     const resData = await deleteMultipleCategories({
-    //         ids: ids,
-    //     });
-    //     if (!resData.isSuccess) {
-    //         closeDeleteDialog();
-    //         enqueueSnackbar(resData.response.message, { variant: 'error' });
+        const resData = await deleteMultipleProducts({
+            ids: ids,
+        });
+        if (!resData.isSuccess) {
+            closeDeleteDialog();
+            enqueueSnackbar(resData.response.message, { variant: 'error' });
 
-    //         return;
-    //     }
+            return;
+        }
 
-    //     deleteIdsInList(ids);
+        deleteIdsInList(ids);
 
-    //     closeDeleteDialog();
-    //     enqueueSnackbar("Xóa thành công", { variant: 'success' });
-    // }
+        closeDeleteDialog();
+        enqueueSnackbar(resData.response.message, { variant: 'success' });
+    }
 
-    // const renderRows = (idField, visibleRows, emptyRows, isSelected, handleSelect) => {
-    //     return (
-    //         <>
-    //             {visibleRows.map((row, index) => {
-    //                 const isItemSelected = isSelected(row[idField]);
-    //                 const labelId = `enhanced-table-checkbox-${index}`;
+    const renderRows = (idField, visibleRows, emptyRows, isSelected, handleSelect) => {
+        return (
+            <>
+                {visibleRows.map((row, index) => {
+                    const isItemSelected = isSelected(row[idField]);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-    //                 return (
-    //                     <TableRow
-    //                         hover
-    //                         aria-checked={isItemSelected}
-    //                         tabIndex={-1}
-    //                         key={row[idField]}
-    //                         selected={isItemSelected}
-    //                         sx={{ cursor: 'pointer' }}
-    //                     >
-    //                         <TableCell padding="checkbox">
-    //                             <Checkbox
-    //                                 color="primary"
-    //                                 onClick={(event) => handleSelect(event, row[idField])}
-    //                                 checked={isItemSelected}
-    //                                 inputProps={{
-    //                                     'aria-labelledby': labelId,
-    //                                 }}
-    //                             />
-    //                         </TableCell>
-    //                         <TableCell
-    //                             component="th"
-    //                             id={labelId}
-    //                             scope="row"
-    //                             padding="none"
-    //                         >
-    //                             {row.name}
-    //                         </TableCell>
-    //                         <TableCell align="left">
-    //                             <Avatar alt="image" src={`${API_URL}${row.imageUrl}`} />
-    //                         </TableCell>
-    //                         <TableCell align="right">
-    //                             <Box sx={{}}>
-    //                                 <IconButton color="primary" component={Link} to={`edit/${row.id}`}>
-    //                                     <ModeEditIcon />
-    //                                 </IconButton>
-    //                                 <IconButton onClick={() => setDeleteDialog({
-    //                                     isOpen: true,
-    //                                     id: row.id,
-    //                                 })}
-    //                                     sx={{ color: pink[500] }}>
-    //                                     <DeleteIcon />
-    //                                 </IconButton>
-    //                             </Box>
-    //                         </TableCell>
-    //                     </TableRow>
-    //                 );
-    //             })}
-    //             {emptyRows > 0 && (
-    //                 <TableRow
-    //                     style={{
-    //                         height: (53) * emptyRows,
-    //                     }}
-    //                 >
-    //                     <TableCell colSpan={headCells.length} />
-    //                 </TableRow>
-    //             )}
-    //         </>
-    //     )
-    // }
+                    return (
+                        <TableRow
+                            hover
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            key={row[idField]}
+                            selected={isItemSelected}
+                            sx={{ cursor: 'pointer' }}
+                        >
+                            <TableCell padding="checkbox">
+                                <Checkbox
+                                    color="primary"
+                                    onClick={(event) => handleSelect(event, row[idField])}
+                                    checked={isItemSelected}
+                                    inputProps={{
+                                        'aria-labelledby': labelId,
+                                    }}
+                                />
+                            </TableCell>
+                            <TableCell
+                                component="th"
+                                id={labelId}
+                                scope="row"
+                                padding="none"
+                            >
+                                {row.name}
+                            </TableCell>
+                            <TableCell align="left">
+                                <Avatar alt="image" src={`${API_URL}${row.imageUrl}`} />
+                            </TableCell>
+                            <TableCell align="right">
+                                {row.price}
+                            </TableCell>
+                            <TableCell align="right">
+                                <Box sx={{}}>
+                                    <IconButton color="primary" component={Link} to={`edit/${row.id}`}>
+                                        <ModeEditIcon />
+                                    </IconButton>
+                                    <IconButton onClick={() => setDeleteDialog({
+                                        isOpen: true,
+                                        id: row.id,
+                                    })}
+                                        sx={{ color: pink[500] }}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Box>
+                            </TableCell>
+                        </TableRow>
+                    );
+                })}
+                {emptyRows > 0 && (
+                    <TableRow
+                        style={{
+                            height: (53) * emptyRows,
+                        }}
+                    >
+                        <TableCell colSpan={headCells.length} />
+                    </TableRow>
+                )}
+            </>
+        )
+    }
 
     return (
         <>
-            {/* <DataTable
+            <DataTable
                 idField="id"
                 title="Loại hàng"
                 headCells={headCells}
-                rows={categoryList}
+                rows={productList}
                 originalRows={originalList}
                 searchOptions={searchOptions}
                 renderRows={renderRows}
-                setRowData={setCategoryList}
+                setRowData={setProductList}
                 onDeleteMultiple={handleDeleteMultiple}
             />
             <ConfirmDialog
-                title="Xóa loại hàng"
-                content="Bạn có chắc muốn là muốn xóa loại hàng này ?"
+                title="Xóa sản phẩm"
+                content="Bạn có chắc muốn là muốn xóa sản phẩm này ?"
                 open={deleteDialog.isOpen}
                 handleClose={handleDeleteDialogClose}
                 onConfirm={handleDialogConfirm}
-            /> */}
+            />
         </>
     )
 }
