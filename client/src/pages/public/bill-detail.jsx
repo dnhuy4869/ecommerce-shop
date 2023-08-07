@@ -1,11 +1,10 @@
 import { PageLayout } from "@components/page-layout";
-import { Box } from "@mui/material";
-import { ProductDetail } from "@features/products/components/product-detail";
-import { useNavigate, useParams } from "react-router-dom";
 import { enqueueSnackbar } from "notistack";
 import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { BillDetail } from "@features/bills/components/bill-detail"
 
-export const ProductDetailPage = () => {
+export const BillDetailPage = () => {
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -19,8 +18,8 @@ export const ProductDetailPage = () => {
 
     return (
         <>
-            <PageLayout title="Chi tiết sản phẩm">
-                <ProductDetail id={id} />
+            <PageLayout title="Chi tiết hóa đơn">
+                <BillDetail id={id} />
             </PageLayout>
         </>
     )

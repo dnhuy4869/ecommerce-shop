@@ -4,7 +4,7 @@ export const AboutPage = () => {
     return (
         <>
             <PageLayout title="Giới thiệu">
-                Giới thiệu
+                About
             </PageLayout>
         </>
     )

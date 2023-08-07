@@ -1,5 +1,5 @@
 import laptopAsus from "@assets/latop-asus.webp"
-import { Box, Card, CardActionArea, CardContent, CardMedia, FormControl, Grid, InputAdornment, MenuItem, OutlinedInput, Select, Typography, useTheme } from "@mui/material"
+import { Box, Card, CardActionArea, CardContent, CardMedia, FormControl, Grid, IconButton, InputAdornment, MenuItem, OutlinedInput, Select, Stack, Typography, useTheme } from "@mui/material"
 import SearchIcon from '@mui/icons-material/Search';
 import { useProductList } from "@features/products/api/use-product-list";
 import formatter from "@utils/formatter";
@@ -7,8 +7,9 @@ import { API_URL } from "@app/config";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 
-export const PublicProductList = ({sidebarWidth}) => {
+export const PublicProductList = ({ sidebarWidth }) => {
 
     const theme = useTheme();
 
@@ -102,25 +103,30 @@ export const PublicProductList = ({sidebarWidth}) => {
             <Grid container sx={{ p: 2 }} spacing={2}>
                 {productList.map((product, index) => (
                     <Grid item key={index} xs={12} sm={6} md={6} lg={3}>
-                        <Card 
-                        component={Link}
-                        to={`/product-detail/${product.id}`}
-                        sx={{
-                            boxShadow: 2,
-                            textDecoration: 'none',
-                        }}>
+                        <Card
+                            component={Box}
+                            sx={{
+                                textDecoration: 'none',
+                                boxShadow: 2,
+                            }}>
                             <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    image={`${API_URL}${product.imageUrl}`}
-                                    alt={product.name}
-                                />
+                                <Box
+                                    component={Link}
+                                    to={`/product-detail/${product.id}`}
+                                >
+                                    <CardMedia
+                                        component="img"
+                                        image={`${API_URL}${product.imageUrl}`}
+                                        alt={product.name}
+                                    />
+                                </Box>
+
                                 <CardContent>
                                     <Typography gutterBottom variant="h6" component="div">
                                         {product.name}
                                     </Typography>
                                     <Typography variant="body1" color="primary">
-                                    {formatter.toVndCurrency(product.price)}
+                                        {formatter.toVndCurrency(product.price)}
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>

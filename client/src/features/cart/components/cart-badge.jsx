@@ -1,18 +1,25 @@
 import { Avatar, Badge, ButtonBase, useTheme } from "@mui/material"
 import MailIcon from '@mui/icons-material/Mail';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 export const CartBadge = () => {
 
     const theme = useTheme();
 
+    const cart = useSelector((state) => state.cart.cart);
+
     return (
         <>
-            <Badge color="secondary" badgeContent={3}>
-                <ButtonBase sx={{
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                }}>
+            <Badge color="secondary" badgeContent={cart.length}>
+                <ButtonBase
+                    component={Link}
+                    to="/cart"
+                    sx={{
+                        borderRadius: '12px',
+                        overflow: 'hidden',
+                    }}>
                     <Avatar
                         variant="rounded"
                         sx={{
