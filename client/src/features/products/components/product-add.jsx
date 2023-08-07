@@ -9,7 +9,7 @@ import { FormImageUpload } from "@components/form-image-upload";
 import { useProductCrud } from "../api/use-product-crud";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
-import { useCategoryList } from "../../categories/api/use-category-list";
+import { useCategoryList } from "@features/categories/api/use-category-list";
 
 export const ProductAdd = () => {
 

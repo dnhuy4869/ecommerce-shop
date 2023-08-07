@@ -16,6 +16,8 @@ module.exports = {
                     "@layouts": "./layouts",
                     "@lib": "./lib",
                     "@hooks": "./hooks",
+                    "@app": "./app",
+                    "@utils": "./utils",
                 }
             }
         }

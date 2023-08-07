@@ -9,9 +9,9 @@ import { ConfirmDialog } from "@components/confirm-dialog";
 import { useSnackbar } from "notistack";
 import { useCategoryList } from "../api/use-category-list";
 import { useCategoryCrud } from "../api/use-category-crud";
-import { API_URL } from "../../../app/config";
+import { API_URL } from "@app/config";
 
-export const CategoryList = () => {
+export const AdminCategoryList = () => {
 
     const headCells = useMemo(() => [
         {

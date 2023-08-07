@@ -1,35 +1,47 @@
 import { useEffect, useState } from "react"
 import { useProductCrud } from "./use-product-crud";
 
-export const useProductList = () => {
+export const useProductList = (idCategory = undefined) => {
 
-    const { getAllProducts } = useProductCrud();
+    const { getAllProducts, getProductsByCategory } = useProductCrud();
 
     const [originalList, setOriginalList] = useState([]);
     const [productList, setProductList] = useState([]);
 
-    useEffect(() => {
-        async function fetchData() {
-            const resData = await getAllProducts();
-            if (!resData.isSuccess) {
-                return;
-            }
+    async function fetchData(id) {
+        let resData = null;
 
-            const newData = resData.response.map((product, index) => {
-                return {
-                    id: product._id,
-                    name: product.name,
-                    imageUrl: product.imageUrl,
-                    price: product.price.toString(),
-                }
-            })
-
-            setOriginalList(newData);
-            setProductList(newData);
+        if (!id || id === "") {
+            resData = await getAllProducts();
+        }
+        else {
+            resData = await getProductsByCategory(id);
         }
 
-        fetchData();
+        if (!resData.isSuccess) {
+            return;
+        }
+
+        const newData = resData.response.map((product, index) => {
+            return {
+                id: product._id,
+                name: product.name,
+                imageUrl: product.imageUrl,
+                price: product.price.toString(),
+            }
+        })
+
+        setOriginalList(newData);
+        setProductList(newData);
+    }
+
+    useEffect(() => {
+        fetchData(idCategory);
     }, []);
+
+    const refetchProductList = (id) => {
+        fetchData(id);
+    }
 
     const deleteIdInList = (id) => {
 
@@ -46,14 +58,18 @@ export const useProductList = () => {
         setOriginalList((prevData) => {
             return prevData.filter((obj) => !ids.includes(obj.id));
         });
-    
+
         setProductList((prevData) => {
             return prevData.filter((obj) => !ids.includes(obj.id));
         });
     }
 
-    return { 
-        originalList, productList, 
-        setProductList, deleteIdInList, deleteIdsInList
-     };
+    return {
+        originalList,
+        productList,
+        refetchProductList,
+        setProductList,
+        deleteIdInList,
+        deleteIdsInList
+    };
 }

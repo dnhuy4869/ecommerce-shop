@@ -1,7 +1,11 @@
-import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import { Box, Typography } from '@mui/material';
 
-export const Logo = () => {
+export const Logo = ({icon, text}) => {
+
+    const IconComponent = () => {
+        return icon;
+    };
+
     return (
         <>
             <Box sx={{
@@ -10,14 +14,14 @@ export const Logo = () => {
                 gap: 0.5,
                 color: 'secondary.main',
             }}>
-                <AdminPanelSettingsOutlinedIcon sx={{
+                <IconComponent sx={{
                     fontSize: '2rem',
                 }} />
                 <Typography sx={{
                     fontSize: '1.2rem',
                     textTransform: 'uppercase',
                     fontWeight: 700,
-                }}>Admin</Typography>
+                }}>{text}</Typography>
             </Box>
         </>
     )

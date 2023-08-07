@@ -10,8 +10,9 @@ import { useSnackbar } from "notistack";
 import { API_URL } from "../../../app/config";
 import { useProductList } from "../api/use-product-list";
 import { useProductCrud } from "../api/use-product-crud";
+import formatter from "@utils/formatter";
 
-export const ProductList = () => {
+export const AdminProductList = () => {
 
     const headCells = useMemo(() => [
         {
@@ -153,7 +154,7 @@ export const ProductList = () => {
                                 <Avatar alt="image" src={`${API_URL}${row.imageUrl}`} />
                             </TableCell>
                             <TableCell align="right">
-                                {row.price}
+                                {formatter.toVndCurrency(row.price)}
                             </TableCell>
                             <TableCell align="right">
                                 <Box sx={{}}>

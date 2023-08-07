@@ -1,6 +1,6 @@
 import { Box, Chip, Drawer, Stack, useMediaQuery, useTheme } from "@mui/material";
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { Logo } from "../logo";
+import { Logo } from "../../../components/logo";
 import { DRAWER_WIDTH } from "../admin-layout.constants";
 import { MenuList } from "./menu-list";
  
@@ -48,7 +48,7 @@ export const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
 
     return (
         <>
-            <Box component="nav" sx={{ flexShrink: { md: 0 }, width: matchUpMd ? DRAWER_WIDTH : 'auto' }} aria-label="mailbox folders">
+            <Box component="nav" sx={{ flexShrink: { md: 0 }, width: matchUpMd ? DRAWER_WIDTH : 'auto' }}>
                 <Drawer
                     container={container}
                     variant={matchUpMd ? 'persistent' : 'temporary'}

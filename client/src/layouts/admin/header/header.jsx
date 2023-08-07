@@ -3,8 +3,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useSelector } from 'react-redux';
 import { DRAWER_WIDTH } from "../admin-layout.constants";
 import { Profile } from '@components/profile';
-import { Logo } from "../logo";
-import { Notification } from "./notification";
+import { Logo } from "../../../components/logo";
+import { Notification } from "@components/notification";
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 
 export const Header = ({ handleLeftDrawerToggle }) => {
     const theme = useTheme();
@@ -41,7 +42,7 @@ export const Header = ({ handleLeftDrawerToggle }) => {
                                 flexGrow: 1,
                                 width: `calc(${DRAWER_WIDTH}px - 1rem)`,
                             }}>
-                            <Logo />
+                            <Logo icon={<AdminPanelSettingsOutlinedIcon />} text="Admin" />
                         </Box>
                     </Box>
 

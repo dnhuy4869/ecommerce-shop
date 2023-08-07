@@ -10,6 +10,10 @@ export const useProductCrud = () => {
         return await apiGet(`/product/get-by-id/${id}`);
     }
 
+    const getProductsByCategory = async (id) => {
+        return await apiGet(`/product/get-by-category/${id}`);
+    }
+
     const addProduct = async (data) => {
         return await apiPost(`/product/add`, data);
     }
@@ -39,6 +43,7 @@ export const useProductCrud = () => {
     return {
         getAllProducts, 
         getProductById,
+        getProductsByCategory,
         addProduct,
         editProduct, 
         deleteProduct,

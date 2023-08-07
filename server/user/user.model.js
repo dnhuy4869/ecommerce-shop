@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
         enum: ["customer", "admin"],
         default: "customer",
     },
+    imageUrl: {
+        type: String,
+        default: "",
+    },
 }, {
     timestamps: true,
 });

@@ -19,7 +19,7 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 import AddIcon from '@mui/icons-material/Add';
-import { Button, FormControl, InputAdornment, MenuItem, OutlinedInput, Select } from '@mui/material';
+import { Button, FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from 'react-router-dom';
 import { ConfirmDialog } from "./confirm-dialog"
@@ -211,7 +211,7 @@ const DataTableSearch = ({ searchOptions, setSearchData, originalData }) => {
                         minWidth: "100%",
                     },
                 }}>
-                    <Typography variant='h5' >Lọc theo</Typography>
+                   <Typography variant='h5' >Lọc theo</Typography>
                     <Select
                         value={option}
                         onChange={e => setOption(e.target.value)}

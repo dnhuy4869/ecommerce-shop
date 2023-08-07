@@ -1,7 +1,7 @@
 import { Divider, List } from "@mui/material"
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { setSelectedMenu } from "../admin-layout.slice";
 import { useNavigate } from "react-router-dom";
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
@@ -10,7 +10,7 @@ import { MenuItem } from "./menu-item";
 export const MenuList = () => {
     const navigate = useNavigate();
 
-    const menuList = [
+    const menuList = useMemo(() => [
         {
             path: "categories",
             icon: <CategoryOutlinedIcon />,
@@ -21,7 +21,7 @@ export const MenuList = () => {
             icon: <Inventory2OutlinedIcon />,
             text: "Sản phẩm",
         },
-    ]
+    ], [])
 
     const dispatch = useDispatch();
     const selectedMenu = useSelector(state => state.adminLayout.selectedMenu);

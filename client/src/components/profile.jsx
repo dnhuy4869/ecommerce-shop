@@ -1,13 +1,16 @@
 import { Avatar, Box, Chip, Divider, List, ListItemButton, ListItemIcon, ListItemText, Menu, Stack, Typography, useTheme } from "@mui/material";
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import User1 from '@assets/profile-default.png';
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { useAuth } from "@features/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { resetLayout } from "@layouts/admin";
+import LoginIcon from '@mui/icons-material/Login';
+import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 
 export const Profile = () => {
     const theme = useTheme();
@@ -32,7 +35,7 @@ export const Profile = () => {
 
         dispatch(resetLayout());
 
-        nagivate("/auth/login");
+        nagivate("/");
     }
 
     const getRole = () => {
@@ -45,27 +48,75 @@ export const Profile = () => {
                 return "Khách hàng";
             case "admin":
                 return "Quản trị viên";
-            default: 
-            return "Khách hàng";
+            default:
+                return "Khách hàng";
         }
 
         return "";
     }
 
-    const buttons = [
-        {
-            icon: <PersonOutlineOutlinedIcon />,
-            text: "Tài khoản",
-            href: "/",
-            onClick: () => { }
-        },
-        {
-            icon: <LogoutOutlinedIcon />,
-            text: "Đăng xuất",
-            href: "/",
-            onClick: () => { logout() }
-        },
-    ]
+    const buttons = useMemo(() => {
+
+        const adminButtons = [
+            {
+                icon: <PersonOutlineOutlinedIcon />,
+                text: "Tài khoản",
+                href: "/",
+                onClick: () => { }
+            },
+            {
+                icon: <LogoutOutlinedIcon />,
+                text: "Đăng xuất",
+                href: "/",
+                onClick: () => { logout() }
+            },
+        ];
+
+        if (user && user.role === "admin") {
+            adminButtons.unshift({
+                icon: <AdminPanelSettingsOutlinedIcon />,
+                text: "Bảng điều khiển",
+                href: "/admin",
+                onClick: () => { }
+            },);
+        }
+
+        return user ? adminButtons : ([
+            {
+                icon: <PersonOutlineOutlinedIcon />,
+                text: "Đăng nhập",
+                href: "/auth/login",
+                onClick: () => { }
+            },
+            {
+                icon: <HowToRegOutlinedIcon />,
+                text: "Đăng ký",
+                href: "/auth/register",
+                onClick: () => { }
+            },
+        ])
+    }, [user]);
+
+    const renderAvatarIcon = (color) => {
+        return user ? (
+            <SettingsOutlinedIcon color={color} />
+        ) : (
+            <LoginIcon color={color} />
+        )
+    };
+
+    const renderWelcomeMessage = () => {
+        return user ? (
+            <>
+                <Typography variant="h4">Xin chào,</Typography>
+                <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
+                    {user ? user.fullName : ""}
+                </Typography>
+            </>
+        ) : (
+            <Typography variant="h4">Đăng nhập / Đăng ký</Typography>
+        )
+    }
 
     return (
         <>
@@ -87,12 +138,13 @@ export const Profile = () => {
                         }
                     },
                     '& .MuiChip-label': {
-                        lineHeight: 0
+                        lineHeight: 0,
+                        paddingLeft: 1,
                     }
                 }}
                 icon={
                     <Avatar
-                        src={User1}
+                        src={user ? user.imageUrl : User1}
                         sx={{
                             ...theme.typography.mediumAvatar,
                             margin: '8px 0 8px 8px !important',
@@ -101,7 +153,7 @@ export const Profile = () => {
                         color="inherit"
                     />
                 }
-                label={<SettingsOutlinedIcon stroke={1.5} size="1.5rem" color={theme.palette.primary.main} />}
+                label={renderAvatarIcon(theme.palette.primary.main)}
                 variant="outlined"
                 color="primary"
                 onClick={handleOpenUserMenu}
@@ -127,13 +179,10 @@ export const Profile = () => {
                 <Box sx={{ paddingX: 2, paddingY: 1.5 }}>
                     <Stack>
                         <Stack direction="row" spacing={0.5} alignItems="center">
-                            <Typography variant="h4">Xin chào,</Typography>
-                            <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                                Ngọc Huy
-                            </Typography>
+                            {renderWelcomeMessage()}
                         </Stack>
                         <Typography variant="subtitle2">
-                           {getRole()}
+                            {getRole()}
                         </Typography>
                     </Stack>
                 </Box>
@@ -157,6 +206,8 @@ export const Profile = () => {
                     {buttons.map((button, index) => (
                         <ListItemButton
                             key={index}
+                            component={Link}
+                            to={button.href}
                             onClick={() => {
                                 button.onClick();
                                 handleCloseUserMenu();

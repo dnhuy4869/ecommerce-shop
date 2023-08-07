@@ -8,6 +8,8 @@ router.get("/get-all", authMiddleware.verifyAdmin, productController.getAllProdu
 
 router.get("/get-by-id/:id", authMiddleware.verifyAdmin, productController.getProductById);
 
+router.get("/get-by-category/:id", authMiddleware.verifyAdmin, productController.getProductsByCategory);
+
 router.post("/add", authMiddleware.verifyAdmin, productController.addProduct);
 
 router.put("/edit/:id", authMiddleware.verifyAdmin, productController.editProduct);

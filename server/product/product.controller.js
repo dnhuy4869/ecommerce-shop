@@ -2,6 +2,7 @@ import HttpStatus from "../constants/http-status.js"
 import ProductModel from "./product.model.js";
 import productValidator from "./product.validator.js";
 import productMethods from "./product.methods.js";
+import CategoryModel from "../category/category.model.js";
 
 const getAllProducts = async (req, res) => {
     try {
@@ -33,6 +34,33 @@ const getProductById = async (req, res) => {
         }
 
         return res.status(HttpStatus.OK).json(product);
+    }
+    catch (err) {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+            message: "Internal server error",
+            error: err,
+        })
+    }
+}
+
+const getProductsByCategory = async (req, res) => {
+    try {
+        if (!req.params.id) {
+            return res.status(HttpStatus.BAD_REQUEST).json({
+                message: "Id không hợp lệ",
+            })
+        }
+
+        const category = await CategoryModel.findById(req.params.id);
+        if (!category) {
+            return res.status(HttpStatus.NOT_FOUND).json({
+                message: "Id không tồn tại",
+            })
+        }
+
+        const products = await ProductModel.find({ idCategory: category._id });
+
+        return res.status(HttpStatus.OK).json(products);
     }
     catch (err) {
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -278,6 +306,7 @@ const uploadImage = async (req, res) => {
 export default {
     getAllProducts,
     getProductById,
+    getProductsByCategory,
     addProduct,
     editProduct,
     deleteProduct,

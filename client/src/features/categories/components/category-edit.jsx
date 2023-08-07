@@ -9,7 +9,7 @@ import { FormImageUpload } from "@components/form-image-upload";
 import { useCategoryCrud } from "../api/use-category-crud";
 import { useSnackbar } from "notistack";
 import { useNavigate, useParams } from "react-router-dom";
-import { API_URL } from "../../../app/config";
+import { API_URL } from "@app/config";
 
 export const CategoryEdit = () => {
     const theme = useTheme();
@@ -29,6 +29,22 @@ export const CategoryEdit = () => {
 
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
+
+    const uploadImage = async (id) => {
+
+        if (!image) {
+            return false;
+        }
+
+        const resData = await uploadCategoryImage(id, image);
+
+        if (!resData.isSuccess) {
+            enqueueSnackbar(resData.reponse.message, { variant: 'error' });
+            return false;
+        }
+
+        return true;
+    }
 
     const { id } = useParams();
 
@@ -61,22 +77,6 @@ export const CategoryEdit = () => {
             setImageFromUrl(`${API_URL}${resData.response.imageUrl}`);
         })()
     }, [])
-
-    const uploadImage = async (id) => {
-
-        if (!image) {
-            return false;
-        }
-
-        const resData = await uploadCategoryImage(id, image);
-
-        if (!resData.isSuccess) {
-            enqueueSnackbar(resData.reponse.message, { variant: 'error' });
-            return false;
-        }
-
-        return true;
-    }
 
     const formik = useFormik({
         enableReinitialize: true,

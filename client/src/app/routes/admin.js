@@ -1,12 +1,12 @@
 import { AdminLayout } from "@layouts/admin/admin-layout";
 import { CategoryPage } from "@pages/admin/categories";
 import { ProductPage } from "@pages/admin/products";
-import { CategoryList } from "@features/categories";
+import { AdminCategoryList } from "@features/categories/components/admin-category-list";
 import { CategoryAdd } from "@features/categories/components/category-add";
 import { CategoryEdit } from "@features/categories/components/category-edit";
-import { ProductList } from "@features/products";
 import { ProductAdd } from "@features/products/components/product-add";
 import { ProductEdit } from "@features/products/components/product-edit";
+import { AdminProductList } from "@features/products/components/admin-product-list";
 
 export const adminRoutes = {
     path: "/admin",
@@ -18,7 +18,7 @@ export const adminRoutes = {
             children: [
                 {
                     path: "",
-                    element: <CategoryList />,
+                    element: <AdminCategoryList />,
                 },
                 {
                     path: "add",
@@ -36,7 +36,7 @@ export const adminRoutes = {
             children: [
                 {
                     path: "",
-                    element: <ProductList />,
+                    element: <AdminProductList />,
                 },
                 {
                     path: "add",
