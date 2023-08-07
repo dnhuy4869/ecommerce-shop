@@ -6,6 +6,7 @@ import formatter from "@utils/formatter";
 import { API_URL } from "@app/config";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export const PublicProductList = ({sidebarWidth}) => {
 
@@ -101,8 +102,12 @@ export const PublicProductList = ({sidebarWidth}) => {
             <Grid container sx={{ p: 2 }} spacing={2}>
                 {productList.map((product, index) => (
                     <Grid item key={index} xs={12} sm={6} md={6} lg={3}>
-                        <Card sx={{
+                        <Card 
+                        component={Link}
+                        to={`/product-detail/${product.id}`}
+                        sx={{
                             boxShadow: 2,
+                            textDecoration: 'none',
                         }}>
                             <CardActionArea>
                                 <CardMedia

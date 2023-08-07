@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { Logo } from "@components/logo";
 import { Notification } from "@components/notification";
 import { Profile } from "@components/profile";
+import { CartBadge } from "@features/cart/components/cart-badge";
 
 export const Header = () => {
 
@@ -151,6 +152,7 @@ export const Header = () => {
                         display: 'flex',
                         alignItems: 'center',
                     }}>
+                        <CartBadge />
                         <Notification />
                         <Profile />
                     </Box>
