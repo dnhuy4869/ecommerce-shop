@@ -4,20 +4,20 @@ import authMiddleware from "../auth/auth.middleware.js";
 
 const router = Router();
 
-router.get("/get-all", authMiddleware.verifyAdmin, productController.getAllProducts);
+router.get("/get-all", productController.getAllProducts);
 
-router.get("/get-by-id/:id", authMiddleware.verifyAdmin, productController.getProductById);
+router.get("/get-by-id/:id", productController.getProductById);
 
-router.get("/get-by-category/:id", authMiddleware.verifyAdmin, productController.getProductsByCategory);
+router.get("/get-by-category/:id",productController.getProductsByCategory);
 
-router.post("/add", authMiddleware.verifyAdmin, productController.addProduct);
+router.post("/add", authMiddleware.verifyCustomer, productController.addProduct);
 
-router.put("/edit/:id", authMiddleware.verifyAdmin, productController.editProduct);
+router.put("/edit/:id", authMiddleware.verifyCustomer, productController.editProduct);
 
-router.delete("/delete/:id", authMiddleware.verifyAdmin, productController.deleteProduct);
+router.delete("/delete/:id", authMiddleware.verifyCustomer, productController.deleteProduct);
 
-router.post("/delete-multiple", authMiddleware.verifyAdmin, productController.deleteMultipleProducts);
+router.post("/delete-multiple", authMiddleware.verifyCustomer, productController.deleteMultipleProducts);
 
-router.post("/upload-image", authMiddleware.verifyAdmin, productController.uploadImage);
+router.post("/upload-image", authMiddleware.verifyCustomer, productController.uploadImage);
 
 export default router;

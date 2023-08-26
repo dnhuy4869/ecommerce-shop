@@ -72,7 +72,7 @@ const login = async (req, res) => {
         })
 
         return res.status(HttpStatus.OK).json({
-            id: user.id,
+            id: user._id,
             username: user.username,
             fullName: user.fullName,
             role: user.role,

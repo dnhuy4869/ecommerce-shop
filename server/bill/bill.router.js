@@ -4,8 +4,8 @@ import authMiddleware from "../auth/auth.middleware.js";
 
 const router = Router();
 
-router.get("/get-by-id/:id", authMiddleware.verifyAdmin, billController.getBillById);
+router.get("/get-by-id/:id", authMiddleware.verifyCustomer, billController.getBillById);
 
-router.post("/add", authMiddleware.verifyAdmin, billController.addBill);
+router.post("/add", authMiddleware.verifyCustomer, billController.addBill);
 
 export default router;
